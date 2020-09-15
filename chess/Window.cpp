@@ -99,57 +99,6 @@ void Window::pollEvents(SDL_Event& event)
 		std::cout << event.motion.x << ", " << event.motion.y << '\n';
 		break;
 
-	/*case SDL_MOUSEBUTTONDOWN:
-		std::cout << "You clicked you mouse button\n";
-		x = event.motion.x;
-		y = event.motion.y;
-
-		if (x >= 0 && x < 90)
-			x = 0;
-		else if (x >= 90 && x < 180)
-			x = 90;
-		else if (x >= 180 && x < 270)
-			x = 180;
-		else if (x >= 270 && x < 360)
-			x = 270;
-		else if (x >= 360 && x < 450)
-			x = 360;
-		else if (x >= 450 && x < 540)
-			x = 450;
-		else if (x >= 540 && x < 630)
-			x = 540;
-		else if (x >= 630 && x < 720)
-			x = 630;
-
-		if (y >= 0 && y < 90)
-			y = 0;
-		else if (y >= 90 && y < 180)
-			y = 90;
-		else if (y >= 180 && y < 270)
-			y = 180;
-		else if (y >= 270 && y < 360)
-			y = 270;
-		else if (y >= 360 && y < 450)
-			y = 360;
-		else if (y >= 450 && y < 540)
-			y = 450;
-		else if (y >= 540 && y < 630)
-			y = 540;
-		else if (y >= 630 && y < 720)
-			y = 630;
-		
-		_markedX = x;
-		_markedY = y;
-
-		std::cout << "X = " << x << "\n";
-		std::cout << "Y = " << y << "\n";
-
-		break;
-
-	case SDL_MOUSEBUTTONUP:
-		std::cout << "You relsead you mouse button\n";
-		break;*/
-
 	default:
 		break;
 	}

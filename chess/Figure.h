@@ -12,6 +12,8 @@ protected:
 
 	bool _marked = false;	//If the user has clicked on the figure's square
 
+	static bool grid[8][8];
+
 public:
 	void draw()const;
 	

@@ -18,8 +18,7 @@ Bishop::Bishop()
 	_marked = false;
 }
 
-Bishop::Bishop(int w, int h, int x, int y, int r, int g, int b, int a, bool marked)// :
-	//_w(w), _h(h), _x(x), _y(y), _r(r), _g(g), _b(b), _a(a), _marked(marked)
+Bishop::Bishop(int w, int h, int x, int y, int r, int g, int b, int a, bool marked)
 {
 	_w = w;
 	_h = h;
@@ -32,8 +31,7 @@ Bishop::Bishop(int w, int h, int x, int y, int r, int g, int b, int a, bool mark
 	_marked = marked;
 }
 
-Bishop::Bishop(int w, int h, int x, int y, const std::string& image_path, bool marked) //:
-	//_w(w), _h(h), _x(x), _y(y), _marked(marked)
+Bishop::Bishop(int w, int h, int x, int y, const std::string& image_path, bool marked)
 {
 	_w = w;
 	_h = h;
@@ -62,22 +60,7 @@ Bishop::~Bishop()
 	SDL_DestroyTexture(_texture);
 }
 
-//void Bishop::draw() const
-//{
-//	SDL_Rect pawn = { _x, _y, _w, _h };
-//
-//	if (_texture)
-//	{
-//		SDL_RenderCopy(Window::renderer, _texture, nullptr, &pawn);
-//	}
-//	else
-//	{
-//		SDL_SetRenderDrawColor(Window::renderer, _r, _g, _b, _a);
-//		SDL_RenderFillRect(Window::renderer, &pawn);
-//	}
-//}
-
-void Bishop::pollEvents(SDL_Event& event)
+void Bishop::pollEvents(SDL_Event& event, bool grid[][8])
 {
 	int x = 10000, y = 10000;
 	switch (event.type)
@@ -103,10 +86,15 @@ void Bishop::pollEvents(SDL_Event& event)
 			_marked = false;
 			if (x != 10000 && y != 10000)
 			{
-				_x = x;
-				_y = y;
-				x = 10000;
-				y = 10000;
+				if (grid[y / 90][x / 90] == true)
+				{
+					grid[_y / 90][_x / 90] = true;
+					_x = x;
+					_y = y;
+					grid[_y / 90][_x / 90] = false;
+					x = 10000;
+					y = 10000;
+				}
 			}
 		}
 
@@ -120,26 +108,3 @@ void Bishop::pollEvents(SDL_Event& event)
 		break;
 		}
 }
-
-//SDL_Texture* Bishop::LoadTexture(std::string filepath)
-//{
-//	SDL_Texture* newTexture = nullptr;
-//
-//	SDL_Surface* loadedSurf = IMG_Load(filepath.c_str());
-//
-//	if (loadedSurf == nullptr)
-//	{
-//		std::cerr << "Failed to load pawn texture\n";
-//	}
-//	else
-//	{
-//		newTexture = SDL_CreateTextureFromSurface(Window::renderer, loadedSurf);
-//		if (newTexture == nullptr)
-//		{
-//			std::cerr << "Failed to create texture for pawn\n";
-//		}
-//		SDL_FreeSurface(loadedSurf);
-//	}
-//
-//	return newTexture;
-//}

@@ -13,9 +13,6 @@ private:
 
 	SDL_Window* _window = nullptr;
 
-	//int _markedX;
-	//int _markedY;
-
 	bool init();
 public:
 	static SDL_Renderer* renderer;
@@ -28,7 +25,4 @@ public:
 
 	void pollEvents(SDL_Event& event);
 	void clear() const; //"means to put stuff onto the screen" - youtube dude
-
-	//int getMarkedX()const { return _markedX; }
-	//int getMarkedY()const { return _markedY; }
 };

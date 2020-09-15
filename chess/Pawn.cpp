@@ -18,8 +18,7 @@ Pawn::Pawn()
 	_marked = false;
 }
 
-Pawn::Pawn(int w, int h, int x, int y, int r, int g, int b, int a, bool marked) //:
-	//_w(w), _h(h), _x(x), _y(y), _r(r), _g(g), _b(b), _a(a), _marked(marked)
+Pawn::Pawn(int w, int h, int x, int y, int r, int g, int b, int a, bool marked)
 {
 	_w = 90;
 	_h = 90;
@@ -32,8 +31,7 @@ Pawn::Pawn(int w, int h, int x, int y, int r, int g, int b, int a, bool marked) 
 	_marked = false;
 }
 
-Pawn::Pawn(int w, int h, int x, int y, const std::string& image_path, bool marked)// :
-	// _w(w), _h(h), _x(x), _y(y), _marked(marked)
+Pawn::Pawn(int w, int h, int x, int y, const std::string& image_path, bool marked)
 {
 	_w = 90;
 	_h = 90;
@@ -61,22 +59,7 @@ Pawn::~Pawn()
 	SDL_DestroyTexture(_texture);
 }
 
-//void Pawn::draw() const
-//{
-//	SDL_Rect pawn = { _x, _y, _w, _h };
-//
-//	if (_texture)
-//	{
-//		SDL_RenderCopy(Window::renderer, _texture, nullptr, &pawn);
-//	}
-//	else
-//	{
-//		SDL_SetRenderDrawColor(Window::renderer, _r, _g, _b, _a);
-//		SDL_RenderFillRect(Window::renderer, &pawn);
-//	}
-//}
-
-void Pawn::pollEvents(SDL_Event& event)
+void Pawn::pollEvents(SDL_Event& event, bool grid[][8])
 {
 	switch (event.type)
 	{
@@ -90,13 +73,23 @@ void Pawn::pollEvents(SDL_Event& event)
 		
 		if ((_marked) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y - 90) && event.motion.y < (_y - 90 + _h)))
 		{
-			_y -= 90;
-			_marked = false;
+			if (grid[(_y - 90) / 90][_x / 90] == true)
+			{
+				grid[_y / 90][_x / 90] = true;
+				_y -= 90;
+				grid[_y / 90][_x / 90] = false;
+				_marked = false;
+			}
 		}
 		if ((_marked) && ((_y == 540) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y - 180) && event.motion.y < (_y - 180 + _h))))
 		{
-			_y -= 180;
-			_marked = false;
+			if (grid[(_y - 180) / 90][_x / 90] == true)
+			{
+				grid[_y / 90][_x / 90] = true;
+				_y -= 180;
+				grid[_y / 90][_x / 90] = false;
+				_marked = false;
+			}
 		}
 
 		if (!(event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= _y && event.motion.y < (_y + _h)))
@@ -110,30 +103,25 @@ void Pawn::pollEvents(SDL_Event& event)
 		//std::cout << "You relsead you mouse button\n";
 		break;
 
+	case SDL_KEYDOWN:
+		switch (event.key.keysym.sym)
+		{
+		case SDLK_x:
+			for (size_t i = 0; i < 8; i++)
+			{
+				for (size_t j = 0; j < 8; j++)
+				{
+					std::cout << grid[i][j] << "  ";
+				}
+				std::cout << "\n";
+			}
+			std::cout << "\n\n";
+			break;
+
+		default:
+			break;
+		}
 	default:
 		break;
 	}
 }
-
-//SDL_Texture* Pawn::LoadTexture(std::string filepath)
-//{
-//	SDL_Texture* newTexture = nullptr;
-//	
-//	SDL_Surface* loadedSurf = IMG_Load(filepath.c_str());
-//	
-//	if (loadedSurf == nullptr)
-//	{
-//		std::cerr << "Failed to load pawn texture\n";
-//	}
-//	else
-//	{
-//		newTexture = SDL_CreateTextureFromSurface(Window::renderer, loadedSurf);
-//		if (newTexture == nullptr)
-//		{
-//			std::cerr << "Failed to create texture for pawn\n";
-//		}
-//		SDL_FreeSurface(loadedSurf);
-//	}
-//
-//	return newTexture;
-//}

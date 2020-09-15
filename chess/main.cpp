@@ -5,20 +5,19 @@
 #include <iostream>
 #include "Bishop.h"
 
-//OPM - of possible moves
-void pollEvents(Window& window, Rect*& moves, size_t sizeOPM, Pawn*& pawns, size_t sizeOfPawns, Bishop*& bishops, size_t sozeOfBishops)
+void pollEvents(bool grid[][8], Window& window, Rect* moves, Pawn* pawns, Bishop* bishops)
 {
 	SDL_Event event;
 
 	if (SDL_PollEvent(&event))
 	{
 		window.pollEvents(event);
-		for(size_t i = 0; i < sozeOfBishops; i++)
-			bishops[i].pollEvents(event);
-		for(size_t i = 0; i < sizeOPM; i++)
+		for(size_t i = 0; i < 2; i++)
+			bishops[i].pollEvents(event, grid);
+		for(size_t i = 0; i < 32; i++)
 			moves[i].pollEvents(event);
-		for (size_t i = 0; i < sizeOfPawns; i++) //we know have 8 pawns in the team probably gonna have to change to 16 later
-			pawns[i].pollEvents(event);
+		for (size_t i = 0; i < 8; i++) //we know have 8 pawns in the team probably gonna have to change to 16 later
+			pawns[i].pollEvents(event, grid);
 	}
 }
 
@@ -26,11 +25,28 @@ int main(int argc, char** argv)
 {
 	Window window("SDL_TESTING", 720, 720);
 	Background board(720, 720, 0, 0, "Resources/board2.jpg");
-	Bishop bishop(90, 90, 630, 450, "Resources/WhiteBishop.png", false);
 
-	size_t nob = 2; //number of bishops
-	Bishop* bishops = new Bishop [nob];
-	for (size_t i = 0; i < nob; i++)
+	bool grid[8][8]; //starts with all free
+	for (size_t i = 0; i < 8; i++)
+	{
+		if (i != 7 && i != 6)
+		{
+			for (size_t j = 0; j < 8; j++)
+			{
+				grid[i][j] = 1;
+			}
+		}
+		else
+		{
+			for (size_t j = 0; j < 8; j++)
+			{
+				grid[i][j] = 0;
+			}
+		}
+	}
+
+	Bishop bishops[2];
+	for (size_t i = 0; i < 2; i++)
 	{
 		bishops[i].setW(90);
 		bishops[i].setH(90);
@@ -38,9 +54,8 @@ int main(int argc, char** argv)
 		bishops[i].setY(630);
 	}
 
-	size_t nopwns = 8; //number of pawns
-	Pawn *pawns = new Pawn [8];
-	for (size_t i = 0; i < nopwns; i++)
+	Pawn pawns[8];
+	for (size_t i = 0; i < 8; i++)
 	{
 		pawns[i].setW(90);
 		pawns[i].setH(90);
@@ -48,9 +63,8 @@ int main(int argc, char** argv)
 		pawns[i].setY(540);
 	}
 
-	size_t nopm = 32; //number of possible moves
-	Rect* posMoves = new Rect[nopm];
-	for (size_t i = 0; i < nopm; i++)
+	Rect posMoves[32];
+	for (size_t i = 0; i < 32; i++)
 	{
 		posMoves[i].setW(60);
 		posMoves[i].setH(60);
@@ -62,10 +76,10 @@ int main(int argc, char** argv)
 
 	while (!window.isClosed())
 	{
-		pollEvents(window, posMoves, nopm, pawns, nopwns, bishops, nob);
+		pollEvents(grid ,window, posMoves, pawns, bishops);
 		board.draw();
 
-		for (size_t i = 0; i < nob; i++)
+		for (size_t i = 0; i < 2; i++)
 		{
 			bishops[i].draw();
 
@@ -96,7 +110,7 @@ int main(int argc, char** argv)
 			}
 		}
 
-		for (size_t i = 0; i < nopwns; i++)
+		for (size_t i = 0; i < 8; i++)
 		{
 			pawns[i].draw();
 
@@ -118,7 +132,5 @@ int main(int argc, char** argv)
 		window.clear();
 	}
 
-	delete[] pawns;
-	//delete [] posMoves;
 	return 0;
 }

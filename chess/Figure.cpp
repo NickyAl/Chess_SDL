@@ -1,7 +1,6 @@
 #include "Figure.h"
 #include <SDL_image.h>
 #include <iostream>
-//#include "Rect.h"
 #include <string>
 
 void Figure::draw() const
