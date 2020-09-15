@@ -1,7 +1,6 @@
 #include "Pawn.h"
 #include <SDL_image.h>
 #include <iostream>
-#include "Rect.h"
 #include <string>
 
 Pawn::Pawn()
@@ -85,10 +84,13 @@ void Pawn::pollEvents(SDL_Event& event, bool grid[][8])
 		{
 			if (grid[(_y - 180) / 90][_x / 90] == true)
 			{
-				grid[_y / 90][_x / 90] = true;
-				_y -= 180;
-				grid[_y / 90][_x / 90] = false;
-				_marked = false;
+				if (grid[(_y - 90) / 90][_x / 90] == true) //checking if there is figure blocking the path to the move
+				{
+					grid[_y / 90][_x / 90] = true;
+					_y -= 180;
+					grid[_y / 90][_x / 90] = false;
+					_marked = false;
+				}
 			}
 		}
 
@@ -99,14 +101,10 @@ void Pawn::pollEvents(SDL_Event& event, bool grid[][8])
 		
 		break;
 
-	case SDL_MOUSEBUTTONUP:
-		//std::cout << "You relsead you mouse button\n";
-		break;
-
 	case SDL_KEYDOWN:
 		switch (event.key.keysym.sym)
 		{
-		case SDLK_x:
+		case SDLK_x: //DEBUG FEATURE
 			for (size_t i = 0; i < 8; i++)
 			{
 				for (size_t j = 0; j < 8; j++)

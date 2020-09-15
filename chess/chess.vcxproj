@@ -135,6 +135,7 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Figure.cpp" />
+    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Rect.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="Figure.h" />
+    <ClInclude Include="Knight.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Window.h" />

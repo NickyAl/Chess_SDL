@@ -1,7 +1,6 @@
 #include "Bishop.h"
 #include <SDL_image.h>
 #include <iostream>
-#include "Rect.h"
 #include <string>
 
 Bishop::Bishop()
@@ -86,7 +85,66 @@ void Bishop::pollEvents(SDL_Event& event, bool grid[][8])
 			_marked = false;
 			if (x != 10000 && y != 10000)
 			{
-				if (grid[y / 90][x / 90] == true)
+				
+				bool doMove = false;
+				int x1 = x, y1 = y;
+				
+				//checking if there is figure blocking the path to the next move
+				if (x - y == _x - _y)
+				{
+					if (x < _x)
+					{
+						while (y1 != _y) //if one coord is the same then both are the same
+						{
+							doMove = grid[y1 / 90][x1 / 90];
+							y1 += 90;
+							x1 += 90;
+							if (!doMove)
+								break;
+						}
+					}
+					else
+					{
+						while (y1 != _y)
+						{
+							doMove = grid[y1 / 90][x1 / 90];
+							y1 -= 90;
+							x1 -= 90;
+						
+							if (!doMove)
+								break;
+						}
+					}
+				}
+				if (x + y == _x + _y)
+				{
+					if (x > _x)
+					{
+						while (y1 != _y)
+						{
+							doMove = grid[y1 / 90][x1 / 90];
+							y1 += 90;
+							x1 -= 90;
+
+							if (!doMove)
+								break;
+						}
+					}
+					else
+					{
+						while (y1 != _y)
+						{
+							doMove = grid[y1 / 90][x1 / 90];
+							y1 -= 90;
+							x1 += 90;
+
+							if (!doMove)
+								break;
+						}
+					}
+				}
+				std::cout << "DOMOVE = " << doMove << "\n";
+				if (doMove)
 				{
 					grid[_y / 90][_x / 90] = true;
 					_x = x;
@@ -98,10 +156,6 @@ void Bishop::pollEvents(SDL_Event& event, bool grid[][8])
 			}
 		}
 
-		break;
-
-	case SDL_MOUSEBUTTONUP:
-		//std::cout << "You relsead you mouse button\n";
 		break;
 
 	default:
