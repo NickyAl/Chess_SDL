@@ -58,7 +58,7 @@ Pawn::~Pawn()
 	SDL_DestroyTexture(_texture);
 }
 
-void Pawn::pollEvents(SDL_Event& event, bool grid[][8])
+void Pawn::pollEvents(SDL_Event& event, char grid[][8])
 {
 	switch (event.type)
 	{
@@ -72,23 +72,23 @@ void Pawn::pollEvents(SDL_Event& event, bool grid[][8])
 		
 		if ((_marked) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y - 90) && event.motion.y < (_y - 90 + _h)))
 		{
-			if (grid[(_y - 90) / 90][_x / 90] == true)
+			if (grid[(_y - 90) / 90][_x / 90] == '-')
 			{
-				grid[_y / 90][_x / 90] = true;
+				grid[_y / 90][_x / 90] = '-';
 				_y -= 90;
-				grid[_y / 90][_x / 90] = false;
+				grid[_y / 90][_x / 90] = 'W';
 				_marked = false;
 			}
 		}
 		if ((_marked) && ((_y == 540) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y - 180) && event.motion.y < (_y - 180 + _h))))
 		{
-			if (grid[(_y - 180) / 90][_x / 90] == true)
+			if (grid[(_y - 180) / 90][_x / 90] == '-')
 			{
-				if (grid[(_y - 90) / 90][_x / 90] == true) //checking if there is figure blocking the path to the move
+				if (grid[(_y - 90) / 90][_x / 90] == '-') //checking if there is figure blocking the path to the move
 				{
-					grid[_y / 90][_x / 90] = true;
+					grid[_y / 90][_x / 90] = '-';
 					_y -= 180;
-					grid[_y / 90][_x / 90] = false;
+					grid[_y / 90][_x / 90] = 'W';
 					_marked = false;
 				}
 			}

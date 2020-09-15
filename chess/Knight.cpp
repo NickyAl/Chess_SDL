@@ -58,7 +58,7 @@ Knight::~Knight()
 	SDL_DestroyTexture(_texture);
 }
 
-void Knight::pollEvents(SDL_Event& event, bool grid[][8])
+void Knight::pollEvents(SDL_Event& event, char grid[][8])
 {
 	int x = 10000, y = 10000;
 	switch (event.type)
@@ -76,7 +76,7 @@ void Knight::pollEvents(SDL_Event& event, bool grid[][8])
 			x = (event.motion.x / 90) * 90;
 			y = (event.motion.y / 90) * 90;
 
-			if (grid[y / 90][x / 90])
+			if (grid[y / 90][x / 90] == '-')
 			{
 				if ((x == _x - 90 && y == _y + 180) ||
 					(x == _x + 90 && y == _y + 180) ||
@@ -87,10 +87,10 @@ void Knight::pollEvents(SDL_Event& event, bool grid[][8])
 					(x == _x - 180 && y == _y - 90) ||
 					(x == _x - 180 && y == _y + 90))
 				{
-					grid[_y / 90][_x / 90] = true;
+					grid[_y / 90][_x / 90] = '-';
 					_x = x;
 					_y = y;
-					grid[_y / 90][_x / 90] = false;
+					grid[_y / 90][_x / 90] = 'W';
 					_marked = false;
 				}
 			}

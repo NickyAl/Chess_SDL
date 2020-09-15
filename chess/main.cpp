@@ -5,8 +5,9 @@
 #include <iostream>
 #include "Bishop.h"
 #include "Knight.h"
+#include "Rook.h"
 
-void pollEvents(bool grid[][8], Window& window, Rect* moves, Pawn* pawns, Bishop* bishops, Knight* knights)
+void pollEvents(char grid[][8], Window& window, Rect* moves, Pawn* pawns, Bishop* bishops, Knight* knights, Rook* rooks)
 {
 	SDL_Event event;
 
@@ -26,6 +27,8 @@ void pollEvents(bool grid[][8], Window& window, Rect* moves, Pawn* pawns, Bishop
 			pawns[i].pollEvents(event, grid);
 		for (size_t i = 0; i < 2; i++)
 			knights[i].pollEvents(event, grid);
+		for (size_t i = 0; i < 2; i++)
+			rooks[i].pollEvents(event, grid);
 	}
 }
 
@@ -34,23 +37,32 @@ int main(int argc, char** argv)
 	Window window("SDL_TESTING", 720, 720);
 	Background board(720, 720, 0, 0, "Resources/board2.jpg");
 
-	bool grid[8][8]; //starts with all free
+	char grid[8][8]; //starts with all free
 	for (size_t i = 0; i < 8; i++)
 	{
 		if (i != 7 && i != 6)
 		{
 			for (size_t j = 0; j < 8; j++)
 			{
-				grid[i][j] = 1;
+				grid[i][j] = '-';
 			}
 		}
 		else
 		{
 			for (size_t j = 0; j < 8; j++)
 			{
-				grid[i][j] = 0;
+				grid[i][j] = 'W';
 			}
 		}
+	}
+
+	Rook rooks[2];
+	for (size_t i = 0; i < 2; i++)
+	{
+		rooks[i].setW(90);
+		rooks[i].setH(90);
+		rooks[i].setX(0 + (630 * i));
+		rooks[i].setY(630);
 	}
 
 	Knight knights[2];
@@ -93,8 +105,35 @@ int main(int argc, char** argv)
 
 	while (!window.isClosed())
 	{
-		pollEvents(grid ,window, posMoves, pawns, bishops, knights);
+		pollEvents(grid ,window, posMoves, pawns, bishops, knights, rooks);
 		board.draw();
+
+		for (size_t i = 0; i < 2; i++)
+		{
+			rooks[i].draw();
+
+			if (rooks[i].getMarked())
+			{
+				for (size_t j = 0, k = 0; j < 32; j += 4, k++)
+				{
+					posMoves[j].setX(rooks[i].getX() + 20);
+					posMoves[j].setY(rooks[i].getY() - 70 - (90 * k));
+					posMoves[j].draw();
+
+					posMoves[j + 1].setX(rooks[i].getX() + 20);
+					posMoves[j + 1].setY(rooks[i].getY() + 110 + (90 * k));
+					posMoves[j + 1].draw();
+
+					posMoves[j + 2].setX(rooks[i].getX() - 70 - (90 * k));
+					posMoves[j + 2].setY(rooks[i].getY() + 20);
+					posMoves[j + 2].draw();
+
+					posMoves[j + 3].setX(rooks[i].getX() + 110 + (90 * k));
+					posMoves[j + 3].setY(rooks[i].getY() + 20);
+					posMoves[j + 3].draw();
+				}
+			}
+		}
 
 		for (size_t i = 0; i < 2; i++)
 		{

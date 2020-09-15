@@ -59,7 +59,7 @@ Bishop::~Bishop()
 	SDL_DestroyTexture(_texture);
 }
 
-void Bishop::pollEvents(SDL_Event& event, bool grid[][8])
+void Bishop::pollEvents(SDL_Event& event, char grid[][8])
 {
 	int x = 10000, y = 10000;
 	switch (event.type)
@@ -96,7 +96,7 @@ void Bishop::pollEvents(SDL_Event& event, bool grid[][8])
 					{
 						while (y1 != _y) //if one coord is the same then both are the same
 						{
-							doMove = grid[y1 / 90][x1 / 90];
+							doMove = (grid[y1 / 90][x1 / 90] == '-' );
 							y1 += 90;
 							x1 += 90;
 							if (!doMove)
@@ -107,7 +107,7 @@ void Bishop::pollEvents(SDL_Event& event, bool grid[][8])
 					{
 						while (y1 != _y)
 						{
-							doMove = grid[y1 / 90][x1 / 90];
+							doMove = (grid[y1 / 90][x1 / 90] == '-');
 							y1 -= 90;
 							x1 -= 90;
 						
@@ -122,7 +122,7 @@ void Bishop::pollEvents(SDL_Event& event, bool grid[][8])
 					{
 						while (y1 != _y)
 						{
-							doMove = grid[y1 / 90][x1 / 90];
+							doMove = (grid[y1 / 90][x1 / 90] == '-');
 							y1 += 90;
 							x1 -= 90;
 
@@ -134,7 +134,7 @@ void Bishop::pollEvents(SDL_Event& event, bool grid[][8])
 					{
 						while (y1 != _y)
 						{
-							doMove = grid[y1 / 90][x1 / 90];
+							doMove = (grid[y1 / 90][x1 / 90] == '-');
 							y1 -= 90;
 							x1 += 90;
 
@@ -146,10 +146,10 @@ void Bishop::pollEvents(SDL_Event& event, bool grid[][8])
 				std::cout << "DOMOVE = " << doMove << "\n";
 				if (doMove)
 				{
-					grid[_y / 90][_x / 90] = true;
+					grid[_y / 90][_x / 90] = '-';
 					_x = x;
 					_y = y;
-					grid[_y / 90][_x / 90] = false;
+					grid[_y / 90][_x / 90] = 'W';
 					x = 10000;
 					y = 10000;
 				}
