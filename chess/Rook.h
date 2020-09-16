@@ -11,5 +11,5 @@ public:
 	Rook(int w, int h, int x, int y, const std::string& image_path, bool marked, char team);
 	~Rook();
 
-	void pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig);
+	void pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig);
 };

@@ -6,3 +6,4 @@
 	  - added queen and king (white team is ready)
 	  - all 32 figures are now on the board and move proparly
 	  - knights and rooks can now take figures from the other team
+	  - now all figures can take figures from the other team

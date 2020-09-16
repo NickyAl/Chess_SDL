@@ -61,9 +61,10 @@ Bishop::~Bishop()
 	SDL_DestroyTexture(_texture);
 }
 
-void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig)
+void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 {
 	int x = 720, y = 720;
+
 	switch (event.type)
 	{
 	case SDL_MOUSEBUTTONDOWN:
@@ -85,33 +86,46 @@ void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[
 		if (!(event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= _y && event.motion.y < (_y + _h)))
 		{
 			_marked = false;
-			if (x != 10000 && y != 10000)
+			if (x != 720 && y != 720)
 			{
 				
 				bool doMove = false;
-				int x1 = x, y1 = y;
+				int x1 = _x, y1 = _y;
 				
 				//checking if there is figure blocking the path to the next move
 				if (x - y == _x - _y)
 				{
 					if (x < _x)
 					{
-						while (y1 != _y) //if one coord is the same then both are the same
+						while (y1 != y) //if one coord is the same then both are the same
 						{
+							y1 -= 90;
+							x1 -= 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-' );
-							y1 += 90;
-							x1 += 90;
+
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
+
 							if (!doMove)
 								break;
 						}
 					}
 					else
 					{
-						while (y1 != _y)
+						while (y1 != y)
 						{
+							y1 += 90;
+							x1 += 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							y1 -= 90;
-							x1 -= 90;
+
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
 						
 							if (!doMove)
 								break;
@@ -122,11 +136,17 @@ void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[
 				{
 					if (x > _x)
 					{
-						while (y1 != _y)
+						while (y1 != y)
 						{
+							y1 -= 90;
+							x1 += 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							y1 += 90;
-							x1 -= 90;
+
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
 
 							if (!doMove)
 								break;
@@ -134,28 +154,50 @@ void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[
 					}
 					else
 					{
-						while (y1 != _y)
+						while (y1 != y)
 						{
+							y1 += 90;
+							x1 -= 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							y1 -= 90;
-							x1 += 90;
+
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
 
 							if (!doMove)
 								break;
 						}
 					}
 				}
-				std::cout << "DOMOVE = " << doMove << "\n";
 				if (doMove)
 				{
-					gridTeams[_y / 90][_x / 90] = '-';
-					gridFigures[_y / 90][_x / 90] = '-';
-					_x = x;
-					_y = y;
-					gridTeams[_y / 90][_x / 90] = _team;
-					gridFigures[_y / 90][_x / 90] = 'b';
-					x = 720;
-					y = 720;
+					if (gridTeams[y / 90][x / 90] != gridTeams[_y / 90][_x / 90])
+					{
+						if (x == x1 && y == y1)
+						{
+							rmvFig[1] = x / 90; //getting the coords of the figure we need to remove from the board
+							rmvFig[0] = y / 90;
+							rmvFig[2] = gridTeams[y / 90][x / 90];
+
+							gridTeams[_y / 90][_x / 90] = '-';
+							_x = x;
+							_y = y;
+							gridTeams[_y / 90][_x / 90] = _team;
+							x = 720;
+							y = 720;
+						}
+					}
+					else if (gridTeams[y1 / 90][x1 / 90] == '-')
+					{
+						gridTeams[_y / 90][_x / 90] = '-';
+						_x = x;
+						_y = y;
+						gridTeams[_y / 90][_x / 90] = _team;
+						x = 720;
+						y = 720;
+					}
 				}
 			}
 		}

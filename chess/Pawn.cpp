@@ -61,7 +61,7 @@ Pawn::~Pawn()
 	SDL_DestroyTexture(_texture);
 }
 
-void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig)
+void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 {
 	switch (event.type)
 	{
@@ -92,12 +92,27 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 					if (gridTeams[(_y - 90) / 90][_x / 90] == '-') //checking if there is figure blocking the path to the move
 					{
 						gridTeams[_y / 90][_x / 90] = '-';
-						gridFigures[_y / 90][_x / 90] = '-';
 						_y -= 180;
 						gridTeams[_y / 90][_x / 90] = _team;
-						gridFigures[_y / 90][_x / 90] = 'p';
 						_marked = false;
 					}
+				}
+			}
+			if ((_marked) && ((event.motion.x - 90 >= _x && event.motion.x - 90 < (_x + _w) && event.motion.y >= (_y - 90) && event.motion.y < (_y - 90 + _h)) ||
+				(event.motion.x + 90 >= _x && event.motion.x + 90 < (_x + _w) && event.motion.y >= (_y - 90) && event.motion.y < (_y - 90 + _h))))
+			{
+				if (gridTeams[event.motion.y / 90][event.motion.x / 90] != gridTeams[_y / 90][_x / 90] &&
+					gridTeams[event.motion.y / 90][event.motion.x / 90] != '-')
+				{
+					rmvFig[1] = event.motion.x / 90; //getting the coords of the figure we need to remove from the board
+					rmvFig[0] = event.motion.y / 90;
+					rmvFig[2] = gridTeams[event.motion.y / 90][event.motion.x / 90];
+
+					gridTeams[_y / 90][_x / 90] = '-';
+					_x = (event.motion.x / 90) * 90;
+					_y = (event.motion.y / 90) * 90;
+					gridTeams[_y / 90][_x / 90] = _team;
+					_marked = false;
 				}
 			}
 		}
@@ -120,18 +135,34 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 					if (gridTeams[(_y + 90) / 90][_x / 90] == '-') //checking if there is figure blocking the path to the move
 					{
 						gridTeams[_y / 90][_x / 90] = '-';
-						gridFigures[_y / 90][_x / 90] = '-';
 						_y += 180;
 						gridTeams[_y / 90][_x / 90] = _team;
-						gridFigures[_y / 90][_x / 90] = 'p';
 						_marked = false;
 					}
+				}
+			}
+			if ((_marked) && ((event.motion.x - 90 >= _x && event.motion.x - 90 < (_x + _w) && event.motion.y >= (_y + 90) && event.motion.y < (_y + 90 + _h)) ||
+				(event.motion.x + 90 >= _x && event.motion.x + 90 < (_x + _w) && event.motion.y >= (_y + 90) && event.motion.y < (_y + 90 + _h))))
+			{
+				if (gridTeams[event.motion.y / 90][event.motion.x / 90] != gridTeams[_y / 90][_x / 90] &&
+					gridTeams[event.motion.y / 90][event.motion.x / 90] != '-')
+				{
+					rmvFig[1] = event.motion.x / 90; //getting the coords of the figure we need to remove from the board
+					rmvFig[0] = event.motion.y / 90;
+					rmvFig[2] = gridTeams[event.motion.y / 90][event.motion.x / 90];
+
+					gridTeams[_y / 90][_x / 90] = '-';
+					_x = (event.motion.x / 90) * 90;
+					_y = (event.motion.y / 90) * 90;
+					gridTeams[_y / 90][_x / 90] = _team;
+					_marked = false;
 				}
 			}
 		}
 
 		if (!(event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= _y && event.motion.y < (_y + _h)))
 		{
+			
 			_marked = false;
 		}
 		
@@ -146,16 +177,6 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 				for (size_t j = 0; j < 8; j++)
 				{
 					std::cout << gridTeams[i][j] << "  ";
-				}
-				std::cout << "\n";
-			}
-			std::cout << "\n\n";
-
-			for (size_t i = 0; i < 8; i++)
-			{
-				for (size_t j = 0; j < 8; j++)
-				{
-					std::cout << gridFigures[i][j] << "  ";
 				}
 				std::cout << "\n";
 			}

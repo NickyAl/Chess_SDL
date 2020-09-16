@@ -61,7 +61,7 @@ King::~King()
 	SDL_DestroyTexture(_texture);
 }
 
-void King::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig)
+void King::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 {
 	int x = 720, y = 720;
 	switch (event.type)
@@ -89,14 +89,26 @@ void King::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 			if (gridTeams[y / 90][x / 90] == '-')
 			{
 				gridTeams[_y / 90][_x / 90] = '-';
-				gridFigures[_y / 90][_x / 90] = '-';
 				_x = x;
 				_y = y;
 				x = 720;
 				y = 720;
 				gridTeams[_y / 90][_x / 90] = _team;
-				gridFigures[_y / 90][_x / 90] = 'K';
 			}
+			else if (gridTeams[y / 90][x / 90] != gridTeams[_y / 90][_x / 90])
+			{
+				rmvFig[1] = x / 90; //getting the coords of the figure we need to remove from the board
+				rmvFig[0] = y / 90;
+				rmvFig[2] = gridTeams[y / 90][x / 90];
+
+				gridTeams[_y / 90][_x / 90] = '-';
+				_x = x;
+				_y = y;
+				gridTeams[_y / 90][_x / 90] = _team;
+				x = 720;
+				y = 720;
+			}
+			
 		}
 
 		break;

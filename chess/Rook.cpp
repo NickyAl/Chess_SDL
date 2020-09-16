@@ -61,12 +61,9 @@ Rook::~Rook()
 	SDL_DestroyTexture(_texture);
 }
 
-void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig)
+void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 {
 	int x = 720, y = 720;
-	char otherTeam = 'B';
-	if (_team == 'B')
-		otherTeam == 'W';
 
 	switch (event.type)
 	{
@@ -112,7 +109,7 @@ void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 							y1 -= 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 							
-							if (!doMove && gridTeams[y1 / 90][x1 / 90] == otherTeam)
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
 							{
 								doMove = true;
 								break;
@@ -131,7 +128,7 @@ void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 							y1 += 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 
-							if (!doMove && gridTeams[y1 / 90][x1 / 90] == otherTeam)
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
 							{
 								doMove = true;
 								break;
@@ -152,7 +149,7 @@ void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 							x1 -= 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 
-							if (!doMove && gridTeams[y1 / 90][x1 / 90] == otherTeam)
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
 							{
 								doMove = true;
 								break;
@@ -170,7 +167,7 @@ void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 							x1 += 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 							
-							if (!doMove && gridTeams[y1 / 90][x1 / 90] == otherTeam)
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
 							{
 								doMove = true;
 								break;
@@ -185,38 +182,31 @@ void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 				
 				if (doMove)
 				{
-					if (gridTeams[y1 / 90][x1 / 90] == otherTeam)
+					if (gridTeams[y / 90][x / 90] != gridTeams[_y / 90][_x / 90])
 					{
-						std::cout << "INSIDE OF FIRST IF x1 = " << x1 << " y1 = " << y1 << "\n";
 						if (x == x1 && y == y1)
 						{
 							rmvFig[1] = x / 90; //getting the coords of the figure we need to remove from the board
 							rmvFig[0] = y / 90;
-							rmvFig[2] = otherTeam;
+							rmvFig[2] = gridTeams[y / 90][x / 90];
 
 							gridTeams[_y / 90][_x / 90] = '-';
-							gridFigures[_y / 90][_x / 90] = '-';
 							_x = x;
 							_y = y;
 							gridTeams[_y / 90][_x / 90] = _team;
-							gridFigures[_y / 90][_x / 90] = 'r';
 							x = 720;
 							y = 720;
 						}
 					}
-					else
+					else if (gridTeams[y1 / 90][x1 / 90] == '-')
 					{
-						std::cout << "ELSE\n";
 						gridTeams[_y / 90][_x / 90] = '-';
-						gridFigures[_y / 90][_x / 90] = '-';
 						_x = x;
 						_y = y;
 						gridTeams[_y / 90][_x / 90] = _team;
-						gridFigures[_y / 90][_x / 90] = 'r';
 						x = 720;
 						y = 720;
 					}
-					
 				}	
 			}
 		}

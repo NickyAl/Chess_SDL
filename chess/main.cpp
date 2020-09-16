@@ -9,7 +9,7 @@
 #include "Queen.h"
 #include "King.h"
 
-void pollEvents(char gridTeams[][9],char gridFigures[][9], Window& window,
+void pollEvents(char gridTeams[][9], Window& window,
 				Rect* moves, Pawn* pawns,
 				Bishop* bishops, Knight* knights,
 				Rook* rooks, Queen* queens, King* kings, size_t* rmvFig)
@@ -27,17 +27,17 @@ void pollEvents(char gridTeams[][9],char gridFigures[][9], Window& window,
 
 		//poll events for figures
 		for(size_t i = 0; i < 4; i++)
-			bishops[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
+			bishops[i].pollEvents(event, gridTeams, rmvFig);
 		for (size_t i = 0; i < 16; i++) //we know have 8 pawns in the team probably gonna have to change to 16 later
-			pawns[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
+			pawns[i].pollEvents(event, gridTeams, rmvFig);
 		for (size_t i = 0; i < 4; i++)
-			knights[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
+			knights[i].pollEvents(event, gridTeams, rmvFig);
 		for (size_t i = 0; i < 4; i++)
-			rooks[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
+			rooks[i].pollEvents(event, gridTeams, rmvFig);
 		for (size_t i = 0; i < 2; i++)
-			queens[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
+			queens[i].pollEvents(event, gridTeams, rmvFig);
 		for (size_t i = 0; i < 2; i++)
-			kings[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
+			kings[i].pollEvents(event, gridTeams, rmvFig);
 	}
 }
 
@@ -246,7 +246,7 @@ int main(int argc, char** argv)
 
 	while (!window.isClosed())
 	{
-		pollEvents(gridTeams, gridFigures,window, posMoves, pawns, bishops, knights, rooks, queens, kings, rmvFig);
+		pollEvents(gridTeams, window, posMoves, pawns, bishops, knights, rooks, queens, kings, rmvFig);
 		board.draw();
 
 		//DRAWING THE KINGS AND THEIR POSSIABLE MOVES
@@ -480,8 +480,8 @@ int main(int argc, char** argv)
 					if (pawns[i].getX() / 90 == rmvFig[1] &&
 						pawns[i].getY() / 90 == rmvFig[0])
 					{
-						pawns[i].setX(720);
-						pawns[i].setY(720);
+						pawns[i].setX(1720);
+						pawns[i].setY(1720);
 						break;
 					}
 				}
@@ -494,8 +494,8 @@ int main(int argc, char** argv)
 					if (rooks[i].getX() / 90 == rmvFig[1] &&
 						rooks[i].getY() / 90 == rmvFig[0])
 					{
-						rooks[i].setX(720);
-						rooks[i].setY(720);
+						rooks[i].setX(1720);
+						rooks[i].setY(1720);
 						break;
 					}
 				}
@@ -508,8 +508,8 @@ int main(int argc, char** argv)
 					if (knights[i].getX() / 90 == rmvFig[1] &&
 						knights[i].getY() / 90 == rmvFig[0])
 					{
-						knights[i].setX(720);
-						knights[i].setY(720);
+						knights[i].setX(1720);
+						knights[i].setY(1720);
 						break;
 					}
 				}
@@ -522,8 +522,8 @@ int main(int argc, char** argv)
 					if (bishops[i].getX() / 90 == rmvFig[1] &&
 						bishops[i].getY() / 90 == rmvFig[0])
 					{
-						bishops[i].setX(720);
-						bishops[i].setY(720);
+						bishops[i].setX(1720);
+						bishops[i].setY(1720);
 						break;
 					}
 				}
@@ -536,8 +536,8 @@ int main(int argc, char** argv)
 					if (kings[i].getX() / 90 == rmvFig[1] &&
 						kings[i].getY() / 90 == rmvFig[0])
 					{
-						kings[i].setX(720);
-						kings[i].setY(720);
+						kings[i].setX(1720);
+						kings[i].setY(1720);
 						break;
 					}
 				}
@@ -550,8 +550,8 @@ int main(int argc, char** argv)
 					if (queens[i].getX() / 90 == rmvFig[1] &&
 						queens[i].getY() / 90 == rmvFig[0])
 					{
-						queens[i].setX(720);
-						queens[i].setY(720);
+						queens[i].setX(1720);
+						queens[i].setY(1720);
 						break;
 					}
 				}

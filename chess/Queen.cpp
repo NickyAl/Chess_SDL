@@ -61,7 +61,7 @@ Queen::~Queen()
 	SDL_DestroyTexture(_texture);
 }
 
-void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig)
+void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 {
 	int x = 720, y = 720;
 	switch (event.type)
@@ -98,7 +98,7 @@ void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[]
 			_marked = false;
 
 			bool doMove = false;
-			int x1 = x, y1 = y;
+			int x1 = _x, y1 = _y;
 
 			if (x != 720 && y != 720)
 			{
@@ -106,20 +106,33 @@ void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[]
 				{
 					if (y < _y)
 					{
-						while (y1 != _y)
+						while (y1 != y)
 						{
+							y1 -= 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							y1 += 90;
+							
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
+							
 							if (!doMove)
 								break;
 						}
 					}
 					if (y > _y)
 					{
-						while (y1 != _y)
+						while (y1 != y)
 						{
+							y1 += 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							y1 -= 90;
+
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
 
 							if (!doMove)
 								break;
@@ -130,10 +143,16 @@ void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[]
 				{
 					if (x < _x)
 					{
-						while (x1 != _x)
+						while (x1 != x)
 						{
+							x1 -= 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							x1 += 90;
+
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
 
 							if (!doMove)
 								break;
@@ -141,10 +160,16 @@ void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[]
 					}
 					if (x > _x)
 					{
-						while (x1 != _x)
+						while (x1 != x)
 						{
+							x1 += 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							x1 -= 90;
+
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
 
 							if (!doMove)
 								break;
@@ -156,22 +181,35 @@ void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[]
 				{
 					if (x < _x)
 					{
-						while (y1 != _y) //if one coord is the same then both are the same
+						while (y1 != y) //if one coord is the same then both are the same
 						{
+							y1 -= 90;
+							x1 -= 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							y1 += 90;
-							x1 += 90;
+							
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
+							
 							if (!doMove)
 								break;
 						}
 					}
 					else
 					{
-						while (y1 != _y)
+						while (y1 != y)
 						{
+							x1 += 90;
+							y1 += 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							y1 -= 90;
-							x1 -= 90;
+
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
 
 							if (!doMove)
 								break;
@@ -183,11 +221,17 @@ void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[]
 				{
 					if (x > _x)
 					{
-						while (y1 != _y)
+						while (y1 != y)
 						{
+							x1 += 90;
+							y1 -= 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							y1 += 90;
-							x1 -= 90;
+
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
 
 							if (!doMove)
 								break;
@@ -195,11 +239,17 @@ void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[]
 					}
 					else
 					{
-						while (y1 != _y)
+						while (y1 != y)
 						{
+							x1 -= 90;
+							y1 += 90;
 							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
-							y1 -= 90;
-							x1 += 90;
+
+							if (!doMove && gridTeams[y1 / 90][x1 / 90] != gridTeams[_y / 90][_x / 90])
+							{
+								doMove = true;
+								break;
+							}
 
 							if (!doMove)
 								break;
@@ -209,14 +259,31 @@ void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[]
 
 				if (doMove)
 				{
-					gridTeams[_y / 90][_x / 90] = '-';
-					gridFigures[_y / 90][_x / 90] = '-';
-					_x = x;
-					_y = y;
-					gridTeams[_y / 90][_x / 90] = 'W';
-					gridFigures[_y / 90][_x / 90] = 'q';
-					x = 720;
-					y = 720;
+					if (gridTeams[y / 90][x / 90] != gridTeams[_y / 90][_x / 90])
+					{
+						if (x == x1 && y == y1)
+						{
+							rmvFig[1] = x / 90; //getting the coords of the figure we need to remove from the board
+							rmvFig[0] = y / 90;
+							rmvFig[2] = gridTeams[y / 90][x / 90];
+
+							gridTeams[_y / 90][_x / 90] = '-';
+							_x = x;
+							_y = y;
+							gridTeams[_y / 90][_x / 90] = _team;
+							x = 720;
+							y = 720;
+						}
+					}
+					else if (gridTeams[y1 / 90][x1 / 90] == '-')
+					{
+						gridTeams[_y / 90][_x / 90] = '-';
+						_x = x;
+						_y = y;
+						gridTeams[_y / 90][_x / 90] = _team;
+						x = 720;
+						y = 720;
+					}
 				}
 			}
 		}
