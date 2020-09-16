@@ -7,8 +7,8 @@ private:
 
 public:
 	King();
-	King(int w, int h, int x, int y, int r, int g, int b, int a, bool marked);
-	King(int w, int h, int x, int y, const std::string& image_path, bool marked);
+	King(int w, int h, int x, int y, int r, int g, int b, int a, bool marked, char team);
+	King(int w, int h, int x, int y, const std::string& image_path, bool marked, char team);
 	~King();
 
 	void pollEvents(SDL_Event& event, char grid[][9]);

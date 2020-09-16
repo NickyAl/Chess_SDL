@@ -12,7 +12,7 @@ protected:
 
 	bool _marked = false;	//If the user has clicked on the figure's square
 
-	static bool grid[8][8];
+	char _team;
 
 public:
 	void draw()const;
@@ -35,4 +35,9 @@ public:
 
 	void setMarked(bool marked) { _marked = marked; }
 	bool getMarked()const { return _marked; }
+
+	void setTeam(char team) { _team = team; }
+	char getTeam()const { return _team; }
+
+	void setTexture(const char* filepath) { _texture = LoadTexture(filepath); }
 };

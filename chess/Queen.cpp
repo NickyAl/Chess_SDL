@@ -15,9 +15,10 @@ Queen::Queen()
 	_a = 200;
 	_texture = LoadTexture("Resources/WhiteRook.png");
 	_marked = false;
+	_team = 'W';
 }
 
-Queen::Queen(int w, int h, int x, int y, int r, int g, int b, int a, bool marked)
+Queen::Queen(int w, int h, int x, int y, int r, int g, int b, int a, bool marked, char team)
 {
 	_w = w;
 	_h = h;
@@ -28,15 +29,16 @@ Queen::Queen(int w, int h, int x, int y, int r, int g, int b, int a, bool marked
 	_b = b;
 	_a = a;
 	_marked = marked;
+	_team = team;
 }
 
-Queen::Queen(int w, int h, int x, int y, const std::string& image_path, bool marked)
+Queen::Queen(int w, int h, int x, int y, const std::string& image_path, bool marked, char team)
 {
 	_w = w;
 	_h = h;
 	_x = x;
 	_y = y;
-
+	_team = team;
 	_marked = marked;
 
 	auto surface = IMG_Load(image_path.c_str()); //c_str converts it to a construct pointer

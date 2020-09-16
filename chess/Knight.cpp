@@ -15,28 +15,31 @@ Knight::Knight()
 	_a = 200;
 	_texture = LoadTexture("Resources/WhiteKnight.png");
 	_marked = false;
+	_team = 'W';
 }
 
-Knight::Knight(int w, int h, int x, int y, int r, int g, int b, int a, bool marked)
+Knight::Knight(int w, int h, int x, int y, int r, int g, int b, int a, bool marked, char team)
 {
-	_w = 90;
-	_h = 90;
-	_x = 630;
-	_y = 450;
-	_r = 10;
-	_g = 180;
-	_b = 10;
-	_a = 200;
-	_marked = false;
+	_w = w;
+	_h = h;
+	_x = x;
+	_y = y;
+	_r = r;
+	_g = g;
+	_b = b;
+	_a = a;
+	_marked = marked;
+	_team = team;
 }
 
-Knight::Knight(int w, int h, int x, int y, const std::string& image_path, bool marked)
+Knight::Knight(int w, int h, int x, int y, const std::string& image_path, bool marked, char team)
 {
-	_w = 90;
-	_h = 90;
-	_x = 630;
-	_y = 450;
-	_marked = false;
+	_w = w;
+	_h = h;
+	_x = x;
+	_y = y;
+	_marked = marked;
+	_team = team;
 
 	auto surface = IMG_Load(image_path.c_str()); //c_str converts it to a construct pointer
 	if (!surface)
@@ -90,7 +93,7 @@ void Knight::pollEvents(SDL_Event& event, char grid[][9])
 					grid[_y / 90][_x / 90] = '-';
 					_x = x;
 					_y = y;
-					grid[_y / 90][_x / 90] = 'W';
+					grid[_y / 90][_x / 90] = _team;
 					_marked = false;
 				}
 			}

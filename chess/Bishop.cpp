@@ -15,9 +15,10 @@ Bishop::Bishop()
 	_a = 200;
 	_texture = LoadTexture("Resources/WhiteBishop.png");
 	_marked = false;
+	_team = 'W';
 }
 
-Bishop::Bishop(int w, int h, int x, int y, int r, int g, int b, int a, bool marked)
+Bishop::Bishop(int w, int h, int x, int y, int r, int g, int b, int a, bool marked, char team)
 {
 	_w = w;
 	_h = h;
@@ -28,16 +29,17 @@ Bishop::Bishop(int w, int h, int x, int y, int r, int g, int b, int a, bool mark
 	_b = b;
 	_a = a;
 	_marked = marked;
+	_team = team;
 }
 
-Bishop::Bishop(int w, int h, int x, int y, const std::string& image_path, bool marked)
+Bishop::Bishop(int w, int h, int x, int y, const std::string& image_path, bool marked, char team)
 {
 	_w = w;
 	_h = h;
 	_x = x;
 	_y = y;
-
 	_marked = marked;
+	_team = team;
 
 	auto surface = IMG_Load(image_path.c_str()); //c_str converts it to a construct pointer
 	if (!surface)
@@ -149,7 +151,7 @@ void Bishop::pollEvents(SDL_Event& event, char grid[][9])
 					grid[_y / 90][_x / 90] = '-';
 					_x = x;
 					_y = y;
-					grid[_y / 90][_x / 90] = 'W';
+					grid[_y / 90][_x / 90] = _team;
 					x = 720;
 					y = 720;
 				}

@@ -15,9 +15,10 @@ Rook::Rook()
 	_a = 200;
 	_texture = LoadTexture("Resources/WhiteRook.png");
 	_marked = false;
+	_team = 'W';
 }
 
-Rook::Rook(int w, int h, int x, int y, int r, int g, int b, int a, bool marked)
+Rook::Rook(int w, int h, int x, int y, int r, int g, int b, int a, bool marked, char team)
 {
 	_w = w;
 	_h = h;
@@ -28,15 +29,16 @@ Rook::Rook(int w, int h, int x, int y, int r, int g, int b, int a, bool marked)
 	_b = b;
 	_a = a;
 	_marked = marked;
+	_team = team;
 }
 
-Rook::Rook(int w, int h, int x, int y, const std::string& image_path, bool marked)
+Rook::Rook(int w, int h, int x, int y, const std::string& image_path, bool marked, char team)
 {
 	_w = w;
 	_h = h;
 	_x = x;
 	_y = y;
-
+	_team = team;
 	_marked = marked;
 
 	auto surface = IMG_Load(image_path.c_str()); //c_str converts it to a construct pointer
@@ -152,7 +154,7 @@ void Rook::pollEvents(SDL_Event& event, char grid[][9])
 					grid[_y / 90][_x / 90] = '-';
 					_x = x;
 					_y = y;
-					grid[_y / 90][_x / 90] = 'W';
+					grid[_y / 90][_x / 90] = _team;
 					x = 720;
 					y = 720;
 				}	

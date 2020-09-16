@@ -9,8 +9,8 @@ private:
 
 public:
 	Pawn();
-	Pawn(int w, int h, int x, int y, int r, int g, int b, int a, bool marked);
-	Pawn(int w, int h, int x, int y, const std::string& image_path, bool marked);
+	Pawn(int w, int h, int x, int y, int r, int g, int b, int a, bool marked, char team);
+	Pawn(int w, int h, int x, int y, const std::string& image_path, bool marked, char team);
 	~Pawn();
 
 	void pollEvents(SDL_Event& event, char grid[][9]);
