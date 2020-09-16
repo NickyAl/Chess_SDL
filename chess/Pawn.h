@@ -13,5 +13,5 @@ public:
 	Pawn(int w, int h, int x, int y, const std::string& image_path, bool marked);
 	~Pawn();
 
-	void pollEvents(SDL_Event& event, char grid[][8]);
+	void pollEvents(SDL_Event& event, char grid[][9]);
 };

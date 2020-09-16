@@ -135,9 +135,11 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Figure.cpp" />
+    <ClCompile Include="King.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="Queen.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Rook.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -146,8 +148,10 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="Figure.h" />
+    <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Pawn.h" />
+    <ClInclude Include="Queen.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Rook.h" />
     <ClInclude Include="Window.h" />

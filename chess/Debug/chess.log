@@ -1,2 +1,7 @@
-﻿  Rook.cpp
+﻿  Bishop.cpp
+  main.cpp
+  Pawn.cpp
+  Queen.cpp
+  Rook.cpp
+  Generating Code...
   chess.vcxproj -> C:\C++ SDL\chess\Debug\chess.exe

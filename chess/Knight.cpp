@@ -58,9 +58,9 @@ Knight::~Knight()
 	SDL_DestroyTexture(_texture);
 }
 
-void Knight::pollEvents(SDL_Event& event, char grid[][8])
+void Knight::pollEvents(SDL_Event& event, char grid[][9])
 {
-	int x = 10000, y = 10000;
+	int x = 720, y = 720;
 	switch (event.type)
 	{
 	case SDL_MOUSEBUTTONDOWN:

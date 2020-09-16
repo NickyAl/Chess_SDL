@@ -59,9 +59,9 @@ Rook::~Rook()
 	SDL_DestroyTexture(_texture);
 }
 
-void Rook::pollEvents(SDL_Event& event, char grid[][8])
+void Rook::pollEvents(SDL_Event& event, char grid[][9])
 {
-	int x = 10000, y = 10000;
+	int x = 720, y = 720;
 	switch (event.type)
 	{
 	case SDL_MOUSEBUTTONDOWN:
@@ -153,8 +153,8 @@ void Rook::pollEvents(SDL_Event& event, char grid[][8])
 					_x = x;
 					_y = y;
 					grid[_y / 90][_x / 90] = 'W';
-					x = 10000;
-					y = 10000;
+					x = 720;
+					y = 720;
 				}	
 			}
 		}

@@ -6,8 +6,13 @@
 #include "Bishop.h"
 #include "Knight.h"
 #include "Rook.h"
+#include "Queen.h"
+#include "King.h"
 
-void pollEvents(char grid[][8], Window& window, Rect* moves, Pawn* pawns, Bishop* bishops, Knight* knights, Rook* rooks)
+void pollEvents(char grid[][9], Window& window,
+				Rect* moves, Pawn* pawns,
+				Bishop* bishops, Knight* knights,
+				Rook* rooks, Queen& queen, King& king)
 {
 	SDL_Event event;
 
@@ -29,6 +34,8 @@ void pollEvents(char grid[][8], Window& window, Rect* moves, Pawn* pawns, Bishop
 			knights[i].pollEvents(event, grid);
 		for (size_t i = 0; i < 2; i++)
 			rooks[i].pollEvents(event, grid);
+		queen.pollEvents(event, grid);
+		king.pollEvents(event, grid);
 	}
 }
 
@@ -37,7 +44,7 @@ int main(int argc, char** argv)
 	Window window("SDL_TESTING", 720, 720);
 	Background board(720, 720, 0, 0, "Resources/board2.jpg");
 
-	char grid[8][8]; //starts with all free
+	char grid[9][9]; //starts with all free
 	for (size_t i = 0; i < 8; i++)
 	{
 		if (i != 7 && i != 6)
@@ -55,6 +62,14 @@ int main(int argc, char** argv)
 			}
 		}
 	}
+	for (size_t i = 0; i < 9; i++)
+		grid[8][i] = '/';
+	for (size_t i = 0; i < 9; i++)
+		grid[i][8] = '/';
+
+	King king(90, 90, 360, 630, "REsources/WhiteKing.png", false);
+
+	Queen queen(90, 90, 270, 630, "REsources/WhiteQueen.png", false);
 
 	Rook rooks[2];
 	for (size_t i = 0; i < 2; i++)
@@ -92,8 +107,8 @@ int main(int argc, char** argv)
 		pawns[i].setY(540);
 	}
 
-	Rect posMoves[32];
-	for (size_t i = 0; i < 32; i++)
+	Rect posMoves[64];
+	for (size_t i = 0; i < 64; i++)
 	{
 		posMoves[i].setW(50);
 		posMoves[i].setH(50);
@@ -105,8 +120,83 @@ int main(int argc, char** argv)
 
 	while (!window.isClosed())
 	{
-		pollEvents(grid ,window, posMoves, pawns, bishops, knights, rooks);
+		pollEvents(grid ,window, posMoves, pawns, bishops, knights, rooks, queen, king);
 		board.draw();
+
+		king.draw();
+		if (king.getMarked())
+		{
+			posMoves[0].setX(king.getX() + 20);
+			posMoves[0].setY(king.getY() - 70);
+			posMoves[0].draw();
+
+			posMoves[1].setX(king.getX() + 20);
+			posMoves[1].setY(king.getY() + 110);
+			posMoves[1].draw();
+
+			posMoves[2].setX(king.getX() - 70);
+			posMoves[2].setY(king.getY() + 20);
+			posMoves[2].draw();
+
+			posMoves[3].setX(king.getX() + 110);
+			posMoves[3].setY(king.getY() + 20);
+			posMoves[3].draw();
+
+			posMoves[4].setX(king.getX() - 70);
+			posMoves[4].setY(king.getY() - 70);
+			posMoves[4].draw();
+
+			posMoves[5].setX(king.getX() + 110);
+			posMoves[5].setY(king.getY() + 110);
+			posMoves[5].draw();
+
+			posMoves[6].setX(king.getX() + 110);
+			posMoves[6].setY(king.getY() - 70);
+			posMoves[6].draw();
+
+			posMoves[7].setX(king.getX() - 70);
+			posMoves[7].setY(king.getY() + 110);
+			posMoves[7].draw();
+		}
+
+		queen.draw();
+		if (queen.getMarked())
+		{
+			for (size_t j = 0, k = 0; j < 64; j += 8, k++)
+			{
+				posMoves[j].setX(queen.getX() + 20);
+				posMoves[j].setY(queen.getY() - 70 - (90 * k));
+				posMoves[j].draw();
+
+				posMoves[j + 1].setX(queen.getX() + 20);
+				posMoves[j + 1].setY(queen.getY() + 110 + (90 * k));
+				posMoves[j + 1].draw();
+
+				posMoves[j + 2].setX(queen.getX() - 70 - (90 * k));
+				posMoves[j + 2].setY(queen.getY() + 20);
+				posMoves[j + 2].draw();
+
+				posMoves[j + 3].setX(queen.getX() + 110 + (90 * k));
+				posMoves[j + 3].setY(queen.getY() + 20);
+				posMoves[j + 3].draw();
+
+				posMoves[j + 4].setX(queen.getX() - 70 - (90 * k));
+				posMoves[j + 4].setY(queen.getY() - 70 - (90 * k));
+				posMoves[j + 4].draw();
+
+				posMoves[j + 5].setX(queen.getX() + 110 + (90 * k));
+				posMoves[j + 5].setY(queen.getY() + 110 + (90 * k));
+				posMoves[j + 5].draw();
+
+				posMoves[j + 6].setX(queen.getX() + 110 + (90 * k));
+				posMoves[j + 6].setY(queen.getY() - 70 - (90 * k));
+				posMoves[j + 6].draw();
+
+				posMoves[j + 7].setX(queen.getX() - 70 - (90 * k));
+				posMoves[j + 7].setY(queen.getY() + 110 + (90 * k));
+				posMoves[j + 7].draw();
+			}
+		}
 
 		for (size_t i = 0; i < 2; i++)
 		{

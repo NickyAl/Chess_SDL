@@ -58,7 +58,7 @@ Pawn::~Pawn()
 	SDL_DestroyTexture(_texture);
 }
 
-void Pawn::pollEvents(SDL_Event& event, char grid[][8])
+void Pawn::pollEvents(SDL_Event& event, char grid[][9])
 {
 	switch (event.type)
 	{
