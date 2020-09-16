@@ -8,3 +8,4 @@ im14.9.2020 - starting date
 	  - knights and rooks can now take figures from the other team
 	  - now all figures can take figures from the other team
 	  - implemented turn system
+17.9.2020 -
