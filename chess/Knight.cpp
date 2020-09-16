@@ -61,7 +61,7 @@ Knight::~Knight()
 	SDL_DestroyTexture(_texture);
 }
 
-void Knight::pollEvents(SDL_Event& event, char grid[][9])
+void Knight::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig)
 {
 	int x = 720, y = 720;
 	switch (event.type)
@@ -79,7 +79,11 @@ void Knight::pollEvents(SDL_Event& event, char grid[][9])
 			x = (event.motion.x / 90) * 90;
 			y = (event.motion.y / 90) * 90;
 
-			if (grid[y / 90][x / 90] == '-')
+			char otherTeam = 'B';
+			if (_team == 'B')
+				otherTeam == 'W';
+
+			if (gridTeams[y / 90][x / 90] == '-' || gridTeams[y / 90][x / 90] == otherTeam)
 			{
 				if ((x == _x - 90 && y == _y + 180) ||
 					(x == _x + 90 && y == _y + 180) ||
@@ -90,10 +94,19 @@ void Knight::pollEvents(SDL_Event& event, char grid[][9])
 					(x == _x - 180 && y == _y - 90) ||
 					(x == _x - 180 && y == _y + 90))
 				{
-					grid[_y / 90][_x / 90] = '-';
+					if (gridTeams[y / 90][x / 90] == otherTeam)
+					{
+						rmvFig[1] = x / 90; //getting the coords of the figure we need to remove from the board
+						rmvFig[0] = y / 90;
+						rmvFig[2] = otherTeam;
+					}
+
+					gridTeams[_y / 90][_x / 90] = '-';
+					gridFigures[_y / 90][_x / 90] = '-';
 					_x = x;
 					_y = y;
-					grid[_y / 90][_x / 90] = _team;
+					gridTeams[_y / 90][_x / 90] = _team;
+					gridFigures[_y / 90][_x / 90] = 'k';
 					_marked = false;
 				}
 			}

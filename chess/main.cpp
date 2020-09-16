@@ -9,10 +9,10 @@
 #include "Queen.h"
 #include "King.h"
 
-void pollEvents(char grid[][9], Window& window,
+void pollEvents(char gridTeams[][9],char gridFigures[][9], Window& window,
 				Rect* moves, Pawn* pawns,
 				Bishop* bishops, Knight* knights,
-				Rook* rooks, Queen* queens, King* kings)
+				Rook* rooks, Queen* queens, King* kings, size_t* rmvFig)
 {
 	SDL_Event event;
 
@@ -27,17 +27,17 @@ void pollEvents(char grid[][9], Window& window,
 
 		//poll events for figures
 		for(size_t i = 0; i < 4; i++)
-			bishops[i].pollEvents(event, grid);
+			bishops[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
 		for (size_t i = 0; i < 16; i++) //we know have 8 pawns in the team probably gonna have to change to 16 later
-			pawns[i].pollEvents(event, grid);
+			pawns[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
 		for (size_t i = 0; i < 4; i++)
-			knights[i].pollEvents(event, grid);
+			knights[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
 		for (size_t i = 0; i < 4; i++)
-			rooks[i].pollEvents(event, grid);
+			rooks[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
 		for (size_t i = 0; i < 2; i++)
-			queens[i].pollEvents(event, grid);
+			queens[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
 		for (size_t i = 0; i < 2; i++)
-			kings[i].pollEvents(event, grid);
+			kings[i].pollEvents(event, gridTeams, gridFigures, rmvFig);
 	}
 }
 
@@ -46,35 +46,82 @@ int main(int argc, char** argv)
 	Window window("SDL_TESTING", 720, 720);
 	Background board(720, 720, 0, 0, "Resources/board2.jpg");
 
-	char grid[9][9]; //starts with all free
+	char gridTeams[9][9]; //starts with all free
 	for (size_t i = 0; i < 8; i++)
 	{
 		if (i != 7 && i != 6 && i != 0 && i != 1)
 		{
 			for (size_t j = 0; j < 8; j++)
 			{
-				grid[i][j] = '-';
+				gridTeams[i][j] = '-';
 			}
 		}
 		else if(i != 0 && i != 1)
 		{
 			for (size_t j = 0; j < 8; j++)
 			{
-				grid[i][j] = 'W';
+				gridTeams[i][j] = 'W';
 			}
 		}
 		else
 		{
 			for (size_t j = 0; j < 8; j++)
 			{
-				grid[i][j] = 'B';
+				gridTeams[i][j] = 'B';
 			}
 		}
 	}
+
+	char gridFigures[9][9]; //starts with all free
+
+	for (size_t i = 0; i < 8; i++)
+	{
+		if (i != 7 && i != 6 && i != 0 && i != 1)
+		{
+			for (size_t j = 0; j < 8; j++)
+			{
+				gridFigures[i][j] = '-';
+			}
+		}
+		else if (i != 1)
+		{
+			for (size_t j = 0; j < 8; j++)
+			{
+				gridFigures[i][j] = 'p';
+			}
+		}
+		else if (i != 6)
+		{
+			for (size_t j = 0; j < 8; j++)
+			{
+				gridFigures[i][j] = 'p';
+			}
+		}
+	}
+
+	//black team
+	gridFigures[0][0] = 'r'; //rook
+	gridFigures[0][7] = 'r';
+	gridFigures[0][1] = 'k'; //knight
+	gridFigures[0][6] = 'k';
+	gridFigures[0][2] = 'b'; //bishop
+	gridFigures[0][5] = 'b'; 
+	gridFigures[0][3] = 'q'; //queen
+	gridFigures[0][4] = 'K'; //King
+	//white team
+	gridFigures[7][0] = 'r'; //rook
+	gridFigures[7][7] = 'r';
+	gridFigures[7][1] = 'k'; //knight
+	gridFigures[7][6] = 'k';
+	gridFigures[7][2] = 'b'; //bishop
+	gridFigures[7][5] = 'b';
+	gridFigures[7][3] = 'q'; //queen
+	gridFigures[7][4] = 'K'; //King
+
 	for (size_t i = 0; i < 9; i++)
-		grid[8][i] = '/';
+		gridTeams[8][i] = '/';
 	for (size_t i = 0; i < 9; i++)
-		grid[i][8] = '/';
+		gridTeams[i][8] = '/';
 
 	King kings[2];
 	kings[0].setW(90);
@@ -192,11 +239,17 @@ int main(int argc, char** argv)
 		posMoves[i].setA(150);
 	}
 
+	size_t rmvFig[3]; //coordinates for removing the figure on them
+	rmvFig[0] = -1; // coord
+	rmvFig[1] = -1; // coord
+	rmvFig[2] = -1; // color ascii code of 'W' and 'B'
+
 	while (!window.isClosed())
 	{
-		pollEvents(grid ,window, posMoves, pawns, bishops, knights, rooks, queens, kings);
+		pollEvents(gridTeams, gridFigures,window, posMoves, pawns, bishops, knights, rooks, queens, kings, rmvFig);
 		board.draw();
 
+		//DRAWING THE KINGS AND THEIR POSSIABLE MOVES
 		for (size_t i = 0; i < 2; i++)
 		{
 			kings[i].draw();
@@ -236,6 +289,7 @@ int main(int argc, char** argv)
 			}
 		}
 
+		//DRAWING THE QUEENS AND THEIR POSSIABLE MOVES
 		for (size_t i = 0; i < 2; i++)
 		{
 			queens[i].draw();
@@ -279,6 +333,7 @@ int main(int argc, char** argv)
 			}
 		}
 
+		//DRAWING THE ROOKS AND THEIR POSSIABLE MOVES
 		for (size_t i = 0; i < 4; i++)
 		{
 			rooks[i].draw();
@@ -306,6 +361,7 @@ int main(int argc, char** argv)
 			}
 		}
 
+		//DRAWING THE KNIGHTS AND THEIR POSSIABLE MOVES
 		for (size_t i = 0; i < 4; i++)
 		{
 			knights[i].draw();
@@ -346,6 +402,7 @@ int main(int argc, char** argv)
 			}
 		}
 
+		//DRAWING THE BISHOPS AND THEIR POSSIABLE MOVES
 		for (size_t i = 0; i < 4; i++)
 		{
 			bishops[i].draw();
@@ -377,6 +434,7 @@ int main(int argc, char** argv)
 			}
 		}
 
+		//DRAWING THE PAWNS AND THEIR POSSIABLE MOVES
 		for (size_t i = 0; i < 16; i++)
 		{
 			pawns[i].draw();
@@ -410,6 +468,97 @@ int main(int argc, char** argv)
 					}
 				}
 			}
+		}
+
+		//CHECKING IF WE NEED TO REMOVE A FIGURE FROM THE BOARD
+		if (rmvFig[0] != -1 && rmvFig[1] != -1)
+		{
+			for (size_t i = 0; i < 16; i++)
+			{
+				if (pawns[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				{
+					if (pawns[i].getX() / 90 == rmvFig[1] &&
+						pawns[i].getY() / 90 == rmvFig[0])
+					{
+						pawns[i].setX(720);
+						pawns[i].setY(720);
+						break;
+					}
+				}
+			}
+
+			for (size_t i = 0; i < 4; i++)
+			{
+				if (rooks[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				{
+					if (rooks[i].getX() / 90 == rmvFig[1] &&
+						rooks[i].getY() / 90 == rmvFig[0])
+					{
+						rooks[i].setX(720);
+						rooks[i].setY(720);
+						break;
+					}
+				}
+			}
+
+			for (size_t i = 0; i < 4; i++)
+			{
+				if (knights[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				{
+					if (knights[i].getX() / 90 == rmvFig[1] &&
+						knights[i].getY() / 90 == rmvFig[0])
+					{
+						knights[i].setX(720);
+						knights[i].setY(720);
+						break;
+					}
+				}
+			}
+
+			for (size_t i = 0; i < 4; i++)
+			{
+				if (bishops[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				{
+					if (bishops[i].getX() / 90 == rmvFig[1] &&
+						bishops[i].getY() / 90 == rmvFig[0])
+					{
+						bishops[i].setX(720);
+						bishops[i].setY(720);
+						break;
+					}
+				}
+			}
+
+			for (size_t i = 0; i < 2; i++)
+			{
+				if (kings[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				{
+					if (kings[i].getX() / 90 == rmvFig[1] &&
+						kings[i].getY() / 90 == rmvFig[0])
+					{
+						kings[i].setX(720);
+						kings[i].setY(720);
+						break;
+					}
+				}
+			}
+
+			for (size_t i = 0; i < 2; i++)
+			{
+				if (queens[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				{
+					if (queens[i].getX() / 90 == rmvFig[1] &&
+						queens[i].getY() / 90 == rmvFig[0])
+					{
+						queens[i].setX(720);
+						queens[i].setY(720);
+						break;
+					}
+				}
+			}
+
+			rmvFig[0] = -1;
+			rmvFig[1] = -1;
 		}
 
 		window.clear();

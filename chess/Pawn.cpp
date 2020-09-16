@@ -61,7 +61,7 @@ Pawn::~Pawn()
 	SDL_DestroyTexture(_texture);
 }
 
-void Pawn::pollEvents(SDL_Event& event, char grid[][9])
+void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig)
 {
 	switch (event.type)
 	{
@@ -77,23 +77,25 @@ void Pawn::pollEvents(SDL_Event& event, char grid[][9])
 		{
 			if ((_marked) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y - 90) && event.motion.y < (_y - 90 + _h)))
 			{
-				if (grid[(_y - 90) / 90][_x / 90] == '-')
+				if (gridTeams[(_y - 90) / 90][_x / 90] == '-')
 				{
-					grid[_y / 90][_x / 90] = '-';
+					gridTeams[_y / 90][_x / 90] = '-';
 					_y -= 90;
-					grid[_y / 90][_x / 90] = _team;
+					gridTeams[_y / 90][_x / 90] = _team;
 					_marked = false;
 				}
 			}
 			if ((_marked) && ((_y == 540) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y - 180) && event.motion.y < (_y - 180 + _h))))
 			{
-				if (grid[(_y - 180) / 90][_x / 90] == '-')
+				if (gridTeams[(_y - 180) / 90][_x / 90] == '-')
 				{
-					if (grid[(_y - 90) / 90][_x / 90] == '-') //checking if there is figure blocking the path to the move
+					if (gridTeams[(_y - 90) / 90][_x / 90] == '-') //checking if there is figure blocking the path to the move
 					{
-						grid[_y / 90][_x / 90] = '-';
+						gridTeams[_y / 90][_x / 90] = '-';
+						gridFigures[_y / 90][_x / 90] = '-';
 						_y -= 180;
-						grid[_y / 90][_x / 90] = _team;
+						gridTeams[_y / 90][_x / 90] = _team;
+						gridFigures[_y / 90][_x / 90] = 'p';
 						_marked = false;
 					}
 				}
@@ -103,23 +105,25 @@ void Pawn::pollEvents(SDL_Event& event, char grid[][9])
 		{
 			if ((_marked) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y + 90) && event.motion.y < (_y + 90 + _h)))
 			{
-				if (grid[(_y + 90) / 90][_x / 90] == '-')
+				if (gridTeams[(_y + 90) / 90][_x / 90] == '-')
 				{
-					grid[_y / 90][_x / 90] = '-';
+					gridTeams[_y / 90][_x / 90] = '-';
 					_y += 90;
-					grid[_y / 90][_x / 90] = _team;
+					gridTeams[_y / 90][_x / 90] = _team;
 					_marked = false;
 				}
 			}
 			if ((_marked) && ((_y == 90) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y + 180) && event.motion.y < (_y + 180 + _h))))
 			{
-				if (grid[(_y + 180) / 90][_x / 90] == '-')
+				if (gridTeams[(_y + 180) / 90][_x / 90] == '-')
 				{
-					if (grid[(_y + 90) / 90][_x / 90] == '-') //checking if there is figure blocking the path to the move
+					if (gridTeams[(_y + 90) / 90][_x / 90] == '-') //checking if there is figure blocking the path to the move
 					{
-						grid[_y / 90][_x / 90] = '-';
+						gridTeams[_y / 90][_x / 90] = '-';
+						gridFigures[_y / 90][_x / 90] = '-';
 						_y += 180;
-						grid[_y / 90][_x / 90] = _team;
+						gridTeams[_y / 90][_x / 90] = _team;
+						gridFigures[_y / 90][_x / 90] = 'p';
 						_marked = false;
 					}
 				}
@@ -141,7 +145,17 @@ void Pawn::pollEvents(SDL_Event& event, char grid[][9])
 			{
 				for (size_t j = 0; j < 8; j++)
 				{
-					std::cout << grid[i][j] << "  ";
+					std::cout << gridTeams[i][j] << "  ";
+				}
+				std::cout << "\n";
+			}
+			std::cout << "\n\n";
+
+			for (size_t i = 0; i < 8; i++)
+			{
+				for (size_t j = 0; j < 8; j++)
+				{
+					std::cout << gridFigures[i][j] << "  ";
 				}
 				std::cout << "\n";
 			}

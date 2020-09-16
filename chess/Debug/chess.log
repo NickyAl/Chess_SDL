@@ -1,2 +1,3 @@
-﻿  main.cpp
+﻿  Rook.cpp
+C:\C++ SDL\chess\chess\Rook.cpp(69,13): warning C4553:  '==': result of expression not used; did you intend '='?
   chess.vcxproj -> C:\C++ SDL\chess\Debug\chess.exe

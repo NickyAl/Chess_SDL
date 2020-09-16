@@ -61,7 +61,7 @@ Queen::~Queen()
 	SDL_DestroyTexture(_texture);
 }
 
-void Queen::pollEvents(SDL_Event& event, char grid[][9])
+void Queen::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig)
 {
 	int x = 720, y = 720;
 	switch (event.type)
@@ -100,7 +100,7 @@ void Queen::pollEvents(SDL_Event& event, char grid[][9])
 			bool doMove = false;
 			int x1 = x, y1 = y;
 
-			if (x != 10000 && y != 10000)
+			if (x != 720 && y != 720)
 			{
 				if (x == _x)
 				{
@@ -108,7 +108,7 @@ void Queen::pollEvents(SDL_Event& event, char grid[][9])
 					{
 						while (y1 != _y)
 						{
-							doMove = (grid[y1 / 90][x1 / 90] == '-');
+							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 							y1 += 90;
 							if (!doMove)
 								break;
@@ -118,7 +118,7 @@ void Queen::pollEvents(SDL_Event& event, char grid[][9])
 					{
 						while (y1 != _y)
 						{
-							doMove = (grid[y1 / 90][x1 / 90] == '-');
+							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 							y1 -= 90;
 
 							if (!doMove)
@@ -132,7 +132,7 @@ void Queen::pollEvents(SDL_Event& event, char grid[][9])
 					{
 						while (x1 != _x)
 						{
-							doMove = (grid[y1 / 90][x1 / 90] == '-');
+							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 							x1 += 90;
 
 							if (!doMove)
@@ -143,7 +143,7 @@ void Queen::pollEvents(SDL_Event& event, char grid[][9])
 					{
 						while (x1 != _x)
 						{
-							doMove = (grid[y1 / 90][x1 / 90] == '-');
+							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 							x1 -= 90;
 
 							if (!doMove)
@@ -158,7 +158,7 @@ void Queen::pollEvents(SDL_Event& event, char grid[][9])
 					{
 						while (y1 != _y) //if one coord is the same then both are the same
 						{
-							doMove = (grid[y1 / 90][x1 / 90] == '-');
+							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 							y1 += 90;
 							x1 += 90;
 							if (!doMove)
@@ -169,7 +169,7 @@ void Queen::pollEvents(SDL_Event& event, char grid[][9])
 					{
 						while (y1 != _y)
 						{
-							doMove = (grid[y1 / 90][x1 / 90] == '-');
+							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 							y1 -= 90;
 							x1 -= 90;
 
@@ -185,7 +185,7 @@ void Queen::pollEvents(SDL_Event& event, char grid[][9])
 					{
 						while (y1 != _y)
 						{
-							doMove = (grid[y1 / 90][x1 / 90] == '-');
+							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 							y1 += 90;
 							x1 -= 90;
 
@@ -197,7 +197,7 @@ void Queen::pollEvents(SDL_Event& event, char grid[][9])
 					{
 						while (y1 != _y)
 						{
-							doMove = (grid[y1 / 90][x1 / 90] == '-');
+							doMove = (gridTeams[y1 / 90][x1 / 90] == '-');
 							y1 -= 90;
 							x1 += 90;
 
@@ -209,10 +209,12 @@ void Queen::pollEvents(SDL_Event& event, char grid[][9])
 
 				if (doMove)
 				{
-					grid[_y / 90][_x / 90] = '-';
+					gridTeams[_y / 90][_x / 90] = '-';
+					gridFigures[_y / 90][_x / 90] = '-';
 					_x = x;
 					_y = y;
-					grid[_y / 90][_x / 90] = 'W';
+					gridTeams[_y / 90][_x / 90] = 'W';
+					gridFigures[_y / 90][_x / 90] = 'q';
 					x = 720;
 					y = 720;
 				}
