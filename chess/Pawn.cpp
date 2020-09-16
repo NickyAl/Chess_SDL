@@ -61,7 +61,7 @@ Pawn::~Pawn()
 	SDL_DestroyTexture(_texture);
 }
 
-void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
+void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig, char& turn)
 {
 	switch (event.type)
 	{
@@ -70,10 +70,11 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 
 		if (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= _y && event.motion.y < (_y + _h))
 		{
-			_marked = true;
+			if(turn == _team)
+				_marked = true;
 		}
-		
-		if (_team == 'W')
+
+		if (_team == 'W' && turn == 'W')
 		{
 			if ((_marked) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y - 90) && event.motion.y < (_y - 90 + _h)))
 			{
@@ -83,6 +84,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 					_y -= 90;
 					gridTeams[_y / 90][_x / 90] = _team;
 					_marked = false;
+					turn = 'B';
 				}
 			}
 			if ((_marked) && ((_y == 540) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y - 180) && event.motion.y < (_y - 180 + _h))))
@@ -94,6 +96,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 						gridTeams[_y / 90][_x / 90] = '-';
 						_y -= 180;
 						gridTeams[_y / 90][_x / 90] = _team;
+						turn = 'B';
 						_marked = false;
 					}
 				}
@@ -112,11 +115,12 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 					_x = (event.motion.x / 90) * 90;
 					_y = (event.motion.y / 90) * 90;
 					gridTeams[_y / 90][_x / 90] = _team;
+					turn = 'B';
 					_marked = false;
 				}
 			}
 		}
-		else
+		else if (turn == 'B')
 		{
 			if ((_marked) && (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= (_y + 90) && event.motion.y < (_y + 90 + _h)))
 			{
@@ -125,6 +129,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 					gridTeams[_y / 90][_x / 90] = '-';
 					_y += 90;
 					gridTeams[_y / 90][_x / 90] = _team;
+					turn = 'W';
 					_marked = false;
 				}
 			}
@@ -137,6 +142,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 						gridTeams[_y / 90][_x / 90] = '-';
 						_y += 180;
 						gridTeams[_y / 90][_x / 90] = _team;
+						turn = 'W';
 						_marked = false;
 					}
 				}
@@ -155,6 +161,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 					_x = (event.motion.x / 90) * 90;
 					_y = (event.motion.y / 90) * 90;
 					gridTeams[_y / 90][_x / 90] = _team;
+					turn = 'W';
 					_marked = false;
 				}
 			}
@@ -162,10 +169,10 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 
 		if (!(event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= _y && event.motion.y < (_y + _h)))
 		{
-			
+
 			_marked = false;
 		}
-		
+
 		break;
 
 	case SDL_KEYDOWN:

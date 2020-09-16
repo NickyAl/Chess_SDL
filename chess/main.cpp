@@ -12,7 +12,7 @@
 void pollEvents(char gridTeams[][9], Window& window,
 				Rect* moves, Pawn* pawns,
 				Bishop* bishops, Knight* knights,
-				Rook* rooks, Queen* queens, King* kings, size_t* rmvFig)
+				Rook* rooks, Queen* queens, King* kings, size_t* rmvFig, char& turn)
 {
 	SDL_Event event;
 
@@ -27,23 +27,23 @@ void pollEvents(char gridTeams[][9], Window& window,
 
 		//poll events for figures
 		for(size_t i = 0; i < 4; i++)
-			bishops[i].pollEvents(event, gridTeams, rmvFig);
+			bishops[i].pollEvents(event, gridTeams, rmvFig, turn);
 		for (size_t i = 0; i < 16; i++) //we know have 8 pawns in the team probably gonna have to change to 16 later
-			pawns[i].pollEvents(event, gridTeams, rmvFig);
+			pawns[i].pollEvents(event, gridTeams, rmvFig, turn);
 		for (size_t i = 0; i < 4; i++)
-			knights[i].pollEvents(event, gridTeams, rmvFig);
+			knights[i].pollEvents(event, gridTeams, rmvFig, turn);
 		for (size_t i = 0; i < 4; i++)
-			rooks[i].pollEvents(event, gridTeams, rmvFig);
+			rooks[i].pollEvents(event, gridTeams, rmvFig, turn);
 		for (size_t i = 0; i < 2; i++)
-			queens[i].pollEvents(event, gridTeams, rmvFig);
+			queens[i].pollEvents(event, gridTeams, rmvFig, turn);
 		for (size_t i = 0; i < 2; i++)
-			kings[i].pollEvents(event, gridTeams, rmvFig);
+			kings[i].pollEvents(event, gridTeams, rmvFig, turn);
 	}
 }
 
 int main(int argc, char** argv)
 {
-	Window window("SDL_TESTING", 720, 720);
+	Window window("SDL_TESTING", 1000, 1000);
 	Background board(720, 720, 0, 0, "Resources/board2.jpg");
 
 	char gridTeams[9][9]; //starts with all free
@@ -244,9 +244,11 @@ int main(int argc, char** argv)
 	rmvFig[1] = -1; // coord
 	rmvFig[2] = -1; // color ascii code of 'W' and 'B'
 
+	char turn = 'W';
+
 	while (!window.isClosed())
 	{
-		pollEvents(gridTeams, window, posMoves, pawns, bishops, knights, rooks, queens, kings, rmvFig);
+		pollEvents(gridTeams, window, posMoves, pawns, bishops, knights, rooks, queens, kings, rmvFig, turn);
 		board.draw();
 
 		//DRAWING THE KINGS AND THEIR POSSIABLE MOVES

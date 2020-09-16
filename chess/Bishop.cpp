@@ -61,7 +61,7 @@ Bishop::~Bishop()
 	SDL_DestroyTexture(_texture);
 }
 
-void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
+void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig, char& turn)
 {
 	int x = 720, y = 720;
 
@@ -71,7 +71,8 @@ void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 
 		if (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= _y && event.motion.y < (_y + _h))
 		{
-			_marked = true;
+			if(turn == _team)
+				_marked = true;
 		}
 
 		if (_marked)
@@ -187,6 +188,10 @@ void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 							gridTeams[_y / 90][_x / 90] = _team;
 							x = 720;
 							y = 720;
+							if (_team == 'W')
+								turn = 'B';
+							else
+								turn = 'W';
 						}
 					}
 					else if (gridTeams[y1 / 90][x1 / 90] == '-')
@@ -197,6 +202,10 @@ void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 						gridTeams[_y / 90][_x / 90] = _team;
 						x = 720;
 						y = 720;
+						if (_team == 'W')
+							turn = 'B';
+						else
+							turn = 'W';
 					}
 				}
 			}

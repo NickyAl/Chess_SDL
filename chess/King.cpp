@@ -61,16 +61,17 @@ King::~King()
 	SDL_DestroyTexture(_texture);
 }
 
-void King::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
+void King::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig, char& turn)
 {
-	int x = 720, y = 720;
+	int x = _x, y = _y;
 	switch (event.type)
 	{
 	case SDL_MOUSEBUTTONDOWN:
 
 		if (event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= _y && event.motion.y < (_y + _h))
 		{
-			_marked = true;
+			if(turn == _team)
+				_marked = true;
 		}
 
 		if (_marked)
@@ -91,9 +92,11 @@ void King::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 				gridTeams[_y / 90][_x / 90] = '-';
 				_x = x;
 				_y = y;
-				x = 720;
-				y = 720;
 				gridTeams[_y / 90][_x / 90] = _team;
+				if (_team == 'W')
+					turn = 'B';
+				else
+					turn = 'W';
 			}
 			else if (gridTeams[y / 90][x / 90] != gridTeams[_y / 90][_x / 90])
 			{
@@ -105,8 +108,10 @@ void King::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 				_x = x;
 				_y = y;
 				gridTeams[_y / 90][_x / 90] = _team;
-				x = 720;
-				y = 720;
+				if (_team == 'W')
+					turn = 'B';
+				else
+					turn = 'W';
 			}
 			
 		}

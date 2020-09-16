@@ -61,7 +61,7 @@ Rook::~Rook()
 	SDL_DestroyTexture(_texture);
 }
 
-void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
+void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig, char& turn)
 {
 	int x = 720, y = 720;
 
@@ -74,7 +74,8 @@ void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 			x = (event.motion.x / 90) * 90;
 			y = (event.motion.y / 90) * 90;
 
-			_marked = true;
+			if(turn == _team)
+				_marked = true;
 		}
 
 		if (_marked)
@@ -196,6 +197,10 @@ void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 							gridTeams[_y / 90][_x / 90] = _team;
 							x = 720;
 							y = 720;
+							if (_team == 'W')
+								turn = 'B';
+							else
+								turn = 'W';
 						}
 					}
 					else if (gridTeams[y1 / 90][x1 / 90] == '-')
@@ -206,6 +211,10 @@ void Rook::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig)
 						gridTeams[_y / 90][_x / 90] = _team;
 						x = 720;
 						y = 720;
+						if (_team == 'W')
+							turn = 'B';
+						else
+							turn = 'W';
 					}
 				}	
 			}
