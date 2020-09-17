@@ -87,7 +87,7 @@ void King::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 		if ((_marked) && (!(event.motion.x >= _x && event.motion.x < (_x + _w) && event.motion.y >= _y && event.motion.y < (_y + _h))))
 		{
 			_marked = false;
-			if (gridTeams[y / 90][x / 90] == '-')
+			if (gridTeams[y / 90][x / 90] == '-' && isUnguarded(gridTeams, gridFigures, x / 90, y / 90, _team))
 			{
 				gridTeams[_y / 90][_x / 90] = '-';
 				gridFigures[_y / 90][_x / 90] = '-';
@@ -100,7 +100,7 @@ void King::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 				else
 					turn = 'W';
 			}
-			else if (gridTeams[y / 90][x / 90] != gridTeams[_y / 90][_x / 90])
+			else if (gridTeams[y / 90][x / 90] != gridTeams[_y / 90][_x / 90] && isUnguarded(gridTeams, gridFigures, x / 90, y / 90, _team))
 			{
 				rmvFig[1] = x / 90; //getting the coords of the figure we need to remove from the board
 				rmvFig[0] = y / 90;

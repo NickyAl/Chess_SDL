@@ -210,7 +210,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 			}
 			std::cout << "\n\n";
 			
-			isUnguarded(gridTeams, gridFigures, 0, 0, 'B');
+			isUnguarded(gridTeams, gridFigures, 2, 1, 'B');
 			
 			break;
 

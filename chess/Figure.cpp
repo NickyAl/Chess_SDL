@@ -52,17 +52,19 @@ bool Figure::isUnguarded(char gridTeams[][9], char gridFigures[][9], int x, int 
 		}
 	}
 
+	//determines which is the opposite team
 	char otherTeam = 'W';
 	if (team == otherTeam)
 	{
 		otherTeam = 'B';
 	}
 
-	size_t k = 0, l = 0;
+	int k = 0, l = 0;
 
-	for (size_t i = 0; i < 8; i++)
+	//determines which squares are protected by figures of the opposite team
+	for (int i = 0; i < 8; i++)
 	{
-		for (size_t j = 0; j < 8; j++)
+		for (int j = 0; j < 8; j++)
 		{
 			if (gridTeams[i][j] == otherTeam)
 			{
@@ -158,7 +160,7 @@ bool Figure::isUnguarded(char gridTeams[][9], char gridFigures[][9], int x, int 
 	
 					break;
 
-				case 'b':
+				case 'b':			//WHERE BISHOP PROTECT
 
 					if (i > 0 && j > 0)
 					{
@@ -229,6 +231,8 @@ bool Figure::isUnguarded(char gridTeams[][9], char gridFigures[][9], int x, int 
 							gridGuarded[k][l] = true;
 						}
 					}
+
+					break;
 
 				case 'Q':					//WHERE QUEEN PROTECT
 					if (i > 0)
@@ -365,32 +369,57 @@ bool Figure::isUnguarded(char gridTeams[][9], char gridFigures[][9], int x, int 
 					}
 					break;
 
-				//case 'k':
-				//	if (i >= 1  && j >= 2)
-				//		gridGuarded[i - 1][j + 2] = true;
+				case 'k':			//WHERE KNIGHT PROTECT
+					if(i - 1 > 0 && j + 2 < 7)
+						gridGuarded[i - 1][j + 2] = true;
 
-				//	if (i <= 6 && j >= 2)
-				//		gridGuarded[i + 1][j + 2] = true;
+					if(i + 1 <= 7 && j + 2 <= 7)
+						gridGuarded[i + 1][j + 2] = true;
 
-				//	if (i <= 5 && j >= 1)
-				//		gridGuarded[i + 2][j + 1] = true;
+					if(i + 2 <= 7 && j + 1 <= 7)
+						gridGuarded[i + 2][j + 1] = true;
 
-				//	if (i <= 5 && j <= 6)
-				//		gridGuarded[i + 2][j - 1] = true;
+					if(i + 2 <= 7 && j - 1 >= 0)
+						gridGuarded[i + 2][j - 1] = true;
 
-				//	if (i <= 6 && j <= 5)
-				//		gridGuarded[i + 1][j - 2] = true;
+					if(i + 1 <= 7 && j - 2 >= 0)
+						gridGuarded[i + 1][j - 2] = true;
 
-				//	if (i >= 1 && j <= 5)
-				//		gridGuarded[i - 1][j - 2] = true;
+					if(i - 1 >= 0 && j - 2 >= 0)
+						gridGuarded[i - 1][j - 2] = true;
 
-				//	if (i >= 2 && j <= 6)
-				//		gridGuarded[i - 2][j - 1] = true;
+					if(i - 2 >= 0 && j - 1 >= 0)
+						gridGuarded[i - 2][j - 1] = true;
 
-				//	if (i >= 1 && j >= 2)
-				//		gridGuarded[i - 2][j + 1] = true;
+					if(i - 2 >= 0 && j + 1 <= 7)
+						gridGuarded[i - 2][j + 1] = true;
 
 					break;
+
+				case 'K':			//WHERE KING PROTECT
+					if(i + 1 <= 7)
+						gridGuarded[i + 1][j] = true;
+					
+					if(i - 1 >= 0)
+						gridGuarded[i - 1][j] = true;
+					
+					if(j + 1 <= 7)
+						gridGuarded[i][j + 1] = true;
+					
+					if(j - 1 >= 0)
+						gridGuarded[i][j - 1] = true;
+					
+					if(i + 1 <= 7 && j + 1 <= 7)
+						gridGuarded[i + 1][j + 1] = true;
+					
+					if(i - 1 >= 0 && j - 1 >= 0)
+						gridGuarded[i - 1][j - 1] = true;
+					
+					if(i + 1 <= 7 && j - 1 >= 0)
+						gridGuarded[i + 1][j - 1] = true;
+					
+					if(i - 1 >= 0 && j + 1 <= 7)
+						gridGuarded[i - 1][j + 1] = true;
 
 				default:
 					break;
@@ -398,6 +427,8 @@ bool Figure::isUnguarded(char gridTeams[][9], char gridFigures[][9], int x, int 
 			}
 		}
 	}
+
+	//Printing the grid in the console for debuging
 	for (size_t i = 0; i < 8; i++)
 	{
 		for (size_t j = 0; j < 8; j++)
@@ -406,5 +437,7 @@ bool Figure::isUnguarded(char gridTeams[][9], char gridFigures[][9], int x, int 
 		}
 		std::cout << "\n";
 	}
-	return false;
+
+	//RETURNS 1 if the sqr is free and the king can go there returns 0 if any figure from the other team is protecting the sqr and the king cant go there
+	return !(gridGuarded[y][x]);
 }
