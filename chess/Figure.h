@@ -18,6 +18,8 @@ public:
 	void draw()const;
 	
 	SDL_Texture* LoadTexture(std::string filepath);
+
+	bool isUnguarded(char gridTeams[][9], char gridFigures[][9], int x, int y, char team);
 	
 	//SETTERS AND GETTERS
 

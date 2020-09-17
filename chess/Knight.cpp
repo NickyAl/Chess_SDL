@@ -61,7 +61,7 @@ Knight::~Knight()
 	SDL_DestroyTexture(_texture);
 }
 
-void Knight::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig, char& turn)
+void Knight::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig, char& turn)
 {
 	int x = 720, y = 720;
 	switch (event.type)
@@ -99,9 +99,11 @@ void Knight::pollEvents(SDL_Event& event, char gridTeams[][9], size_t* rmvFig, c
 					}
 
 					gridTeams[_y / 90][_x / 90] = '-';
+					gridFigures[_y / 90][_x / 90] = '-';
 					_x = x;
 					_y = y;
 					gridTeams[_y / 90][_x / 90] = _team;
+					gridFigures[_y / 90][_x / 90] = 'k';
 					_marked = false;
 					if (_team == 'W')
 						turn = 'B';

@@ -9,7 +9,7 @@
 #include "Queen.h"
 #include "King.h"
 
-void pollEvents(char gridTeams[][9], Window& window,
+void pollEvents(char gridTeams[][9], char gridFigures[][9], Window& window,
 				Rect* moves, Pawn* pawns,
 				Bishop* bishops, Knight* knights,
 				Rook* rooks, Queen* queens, King* kings, size_t* rmvFig, char& turn)
@@ -27,23 +27,23 @@ void pollEvents(char gridTeams[][9], Window& window,
 
 		//poll events for figures
 		for(size_t i = 0; i < 4; i++)
-			bishops[i].pollEvents(event, gridTeams, rmvFig, turn);
+			bishops[i].pollEvents(event, gridTeams, gridFigures, rmvFig, turn);
 		for (size_t i = 0; i < 16; i++) //we know have 8 pawns in the team probably gonna have to change to 16 later
-			pawns[i].pollEvents(event, gridTeams, rmvFig, turn);
+			pawns[i].pollEvents(event, gridTeams, gridFigures, rmvFig, turn);
 		for (size_t i = 0; i < 4; i++)
-			knights[i].pollEvents(event, gridTeams, rmvFig, turn);
+			knights[i].pollEvents(event, gridTeams, gridFigures, rmvFig, turn);
 		for (size_t i = 0; i < 4; i++)
-			rooks[i].pollEvents(event, gridTeams, rmvFig, turn);
+			rooks[i].pollEvents(event, gridTeams, gridFigures, rmvFig, turn);
 		for (size_t i = 0; i < 2; i++)
-			queens[i].pollEvents(event, gridTeams, rmvFig, turn);
+			queens[i].pollEvents(event, gridTeams, gridFigures, rmvFig, turn);
 		for (size_t i = 0; i < 2; i++)
-			kings[i].pollEvents(event, gridTeams, rmvFig, turn);
+			kings[i].pollEvents(event, gridTeams, gridFigures, rmvFig, turn);
 	}
 }
 
 int main(int argc, char** argv)
 {
-	Window window("SDL_TESTING", 1000, 1000);
+	Window window("Chess_sdl", 720, 720);
 	Background board(720, 720, 0, 0, "Resources/board2.jpg");
 
 	char gridTeams[9][9]; //starts with all free
@@ -106,7 +106,7 @@ int main(int argc, char** argv)
 	gridFigures[0][6] = 'k';
 	gridFigures[0][2] = 'b'; //bishop
 	gridFigures[0][5] = 'b'; 
-	gridFigures[0][3] = 'q'; //queen
+	gridFigures[0][3] = 'Q'; //queen
 	gridFigures[0][4] = 'K'; //King
 	//white team
 	gridFigures[7][0] = 'r'; //rook
@@ -115,7 +115,7 @@ int main(int argc, char** argv)
 	gridFigures[7][6] = 'k';
 	gridFigures[7][2] = 'b'; //bishop
 	gridFigures[7][5] = 'b';
-	gridFigures[7][3] = 'q'; //queen
+	gridFigures[7][3] = 'Q'; //queen
 	gridFigures[7][4] = 'K'; //King
 
 	for (size_t i = 0; i < 9; i++)
@@ -248,7 +248,7 @@ int main(int argc, char** argv)
 
 	while (!window.isClosed())
 	{
-		pollEvents(gridTeams, window, posMoves, pawns, bishops, knights, rooks, queens, kings, rmvFig, turn);
+		pollEvents(gridTeams, gridFigures, window, posMoves, pawns, bishops, knights, rooks, queens, kings, rmvFig, turn);
 		board.draw();
 
 		//DRAWING THE KINGS AND THEIR POSSIABLE MOVES
