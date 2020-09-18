@@ -104,6 +104,7 @@ void Knight::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[
 					_y = y;
 					gridTeams[_y / 90][_x / 90] = _team;
 					gridFigures[_y / 90][_x / 90] = 'k';
+					gridFigures[8][8] = 'k';
 					_marked = false;
 					if (_team == 'W')
 						turn = 'B';

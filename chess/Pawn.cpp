@@ -85,6 +85,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 					_y -= 90;
 					gridTeams[_y / 90][_x / 90] = _team;
 					gridFigures[_y / 90][_x / 90] = 'p';
+					gridFigures[8][8] = 'p';
 					_marked = false;
 					turn = 'B';
 				}
@@ -100,6 +101,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 						_y -= 180;
 						gridTeams[_y / 90][_x / 90] = _team;
 						gridFigures[_y / 90][_x / 90] = 'p';
+						gridFigures[8][8] = 'p';
 						turn = 'B';
 						_marked = false;
 					}
@@ -121,6 +123,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 					_y = (event.motion.y / 90) * 90;
 					gridTeams[_y / 90][_x / 90] = _team;
 					gridFigures[_y / 90][_x / 90] = 'p';
+					gridFigures[8][8] = 'p';
 					turn = 'B';
 					_marked = false;
 				}
@@ -137,6 +140,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 					_y += 90;
 					gridTeams[_y / 90][_x / 90] = _team;
 					gridFigures[_y / 90][_x / 90] = 'p';
+					gridFigures[8][8] = 'p';
 					turn = 'W';
 					_marked = false;
 				}
@@ -152,6 +156,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 						_y += 180;
 						gridTeams[_y / 90][_x / 90] = _team;
 						gridFigures[_y / 90][_x / 90] = 'p';
+						gridFigures[8][8] = 'p';
 						turn = 'W';
 						_marked = false;
 					}
@@ -173,6 +178,7 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 					_y = (event.motion.y / 90) * 90;
 					gridTeams[_y / 90][_x / 90] = _team;
 					gridFigures[_y / 90][_x / 90] = 'p';
+					gridFigures[8][8] = 'p';
 					turn = 'W';
 					_marked = false;
 				}
@@ -209,8 +215,6 @@ void Pawn::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][
 				std::cout << "\n";
 			}
 			std::cout << "\n\n";
-			
-			isUnguarded(gridTeams, gridFigures, 2, 1, 'B');
 			
 			break;
 

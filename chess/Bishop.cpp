@@ -188,6 +188,7 @@ void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[
 							_y = y;
 							gridTeams[_y / 90][_x / 90] = _team;
 							gridFigures[_y / 90][_x / 90] = 'b';
+							gridFigures[8][8] = 'b';
 							x = 720;
 							y = 720;
 							if (_team == 'W')
@@ -204,6 +205,7 @@ void Bishop::pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[
 						_y = y;
 						gridTeams[_y / 90][_x / 90] = _team;
 						gridFigures[_y / 90][_x / 90] = 'b';
+						gridFigures[8][8] = 'b';
 						x = 720;
 						y = 720;
 						if (_team == 'W')

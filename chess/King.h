@@ -12,4 +12,6 @@ public:
 	~King();
 
 	void pollEvents(SDL_Event& event, char gridTeams[][9], char gridFigures[][9], size_t* rmvFig, char& turn);
+
+	bool checkmate(char gridTeams[][9], char gridFigures[][9]);
 };

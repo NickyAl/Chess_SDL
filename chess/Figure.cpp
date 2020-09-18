@@ -319,7 +319,6 @@ bool Figure::isUnguarded(char gridTeams[][9], char gridFigures[][9], int x, int 
 
 					while (k - 1 < 7 && l - 1 < 7 && gridFigures[k][l] == '-')
 					{
-						std::cout << "TEST\n";
 						gridGuarded[k][l] = true;
 						k++;
 						l++;
@@ -429,14 +428,14 @@ bool Figure::isUnguarded(char gridTeams[][9], char gridFigures[][9], int x, int 
 	}
 
 	//Printing the grid in the console for debuging
-	for (size_t i = 0; i < 8; i++)
-	{
-		for (size_t j = 0; j < 8; j++)
-		{
-			std::cout << gridGuarded[i][j] << " ";
-		}
-		std::cout << "\n";
-	}
+	//for (size_t i = 0; i < 8; i++)
+	//{
+	//	for (size_t j = 0; j < 8; j++)
+	//	{
+	//		std::cout << gridGuarded[i][j] << " ";
+	//	}
+	//	std::cout << "\n";
+	//}
 
 	//RETURNS 1 if the sqr is free and the king can go there returns 0 if any figure from the other team is protecting the sqr and the king cant go there
 	return !(gridGuarded[y][x]);

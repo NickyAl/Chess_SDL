@@ -73,7 +73,7 @@ int main(int argc, char** argv)
 	}
 
 	char gridFigures[9][9]; //starts with all free
-
+	//its 9x9 to have a boarder on the left and down but we can use the [8][8] to store which figure is the one that wast moved
 	for (size_t i = 0; i < 8; i++)
 	{
 		if (i != 7 && i != 6 && i != 0 && i != 1)
@@ -246,323 +246,342 @@ int main(int argc, char** argv)
 
 	char turn = 'W';
 
+	Rect endscreenWhiteWon(720, 720, 0, 0, 255, 255, 255, 255);
+	Rect endscreenBlackWon(720, 720, 0, 0, 0, 0, 0, 255);
+
 	while (!window.isClosed())
 	{
 		pollEvents(gridTeams, gridFigures, window, posMoves, pawns, bishops, knights, rooks, queens, kings, rmvFig, turn);
-		board.draw();
 
-		//DRAWING THE KINGS AND THEIR POSSIABLE MOVES
-		for (size_t i = 0; i < 2; i++)
+
+		//GAME OVER
+		if (kings[0].checkmate(gridTeams, gridFigures) || kings[1].checkmate(gridTeams, gridFigures))
 		{
-			kings[i].draw();
-			if (kings[i].getMarked())
+			if (turn == 'W')
 			{
-				posMoves[0].setX(kings[i].getX() + 20);
-				posMoves[0].setY(kings[i].getY() - 70);
-				posMoves[0].draw();
-
-				posMoves[1].setX(kings[i].getX() + 20);
-				posMoves[1].setY(kings[i].getY() + 110);
-				posMoves[1].draw();
-
-				posMoves[2].setX(kings[i].getX() - 70);
-				posMoves[2].setY(kings[i].getY() + 20);
-				posMoves[2].draw();
-
-				posMoves[3].setX(kings[i].getX() + 110);
-				posMoves[3].setY(kings[i].getY() + 20);
-				posMoves[3].draw();
-
-				posMoves[4].setX(kings[i].getX() - 70);
-				posMoves[4].setY(kings[i].getY() - 70);
-				posMoves[4].draw();
-
-				posMoves[5].setX(kings[i].getX() + 110);
-				posMoves[5].setY(kings[i].getY() + 110);
-				posMoves[5].draw();
-
-				posMoves[6].setX(kings[i].getX() + 110);
-				posMoves[6].setY(kings[i].getY() - 70);
-				posMoves[6].draw();
-
-				posMoves[7].setX(kings[i].getX() - 70);
-				posMoves[7].setY(kings[i].getY() + 110);
-				posMoves[7].draw();
+				endscreenBlackWon.draw();
+			}
+			else
+			{
+				endscreenWhiteWon.draw();
 			}
 		}
-
-		//DRAWING THE QUEENS AND THEIR POSSIABLE MOVES
-		for (size_t i = 0; i < 2; i++)
+		else
 		{
-			queens[i].draw();
+			board.draw();
 
-			if (queens[i].getMarked())
+			//DRAWING THE KINGS AND THEIR POSSIABLE MOVES
+			for (size_t i = 0; i < 2; i++)
 			{
-				for (size_t j = 0, k = 0; j < 64; j += 8, k++)
+				kings[i].draw();
+				if (kings[i].getMarked())
 				{
-					posMoves[j].setX(queens[i].getX() + 20);
-					posMoves[j].setY(queens[i].getY() - 70 - (90 * k));
-					posMoves[j].draw();
+					posMoves[0].setX(kings[i].getX() + 20);
+					posMoves[0].setY(kings[i].getY() - 70);
+					posMoves[0].draw();
 
-					posMoves[j + 1].setX(queens[i].getX() + 20);
-					posMoves[j + 1].setY(queens[i].getY() + 110 + (90 * k));
-					posMoves[j + 1].draw();
+					posMoves[1].setX(kings[i].getX() + 20);
+					posMoves[1].setY(kings[i].getY() + 110);
+					posMoves[1].draw();
 
-					posMoves[j + 2].setX(queens[i].getX() - 70 - (90 * k));
-					posMoves[j + 2].setY(queens[i].getY() + 20);
-					posMoves[j + 2].draw();
+					posMoves[2].setX(kings[i].getX() - 70);
+					posMoves[2].setY(kings[i].getY() + 20);
+					posMoves[2].draw();
 
-					posMoves[j + 3].setX(queens[i].getX() + 110 + (90 * k));
-					posMoves[j + 3].setY(queens[i].getY() + 20);
-					posMoves[j + 3].draw();
+					posMoves[3].setX(kings[i].getX() + 110);
+					posMoves[3].setY(kings[i].getY() + 20);
+					posMoves[3].draw();
 
-					posMoves[j + 4].setX(queens[i].getX() - 70 - (90 * k));
-					posMoves[j + 4].setY(queens[i].getY() - 70 - (90 * k));
-					posMoves[j + 4].draw();
+					posMoves[4].setX(kings[i].getX() - 70);
+					posMoves[4].setY(kings[i].getY() - 70);
+					posMoves[4].draw();
 
-					posMoves[j + 5].setX(queens[i].getX() + 110 + (90 * k));
-					posMoves[j + 5].setY(queens[i].getY() + 110 + (90 * k));
-					posMoves[j + 5].draw();
+					posMoves[5].setX(kings[i].getX() + 110);
+					posMoves[5].setY(kings[i].getY() + 110);
+					posMoves[5].draw();
 
-					posMoves[j + 6].setX(queens[i].getX() + 110 + (90 * k));
-					posMoves[j + 6].setY(queens[i].getY() - 70 - (90 * k));
-					posMoves[j + 6].draw();
+					posMoves[6].setX(kings[i].getX() + 110);
+					posMoves[6].setY(kings[i].getY() - 70);
+					posMoves[6].draw();
 
-					posMoves[j + 7].setX(queens[i].getX() - 70 - (90 * k));
-					posMoves[j + 7].setY(queens[i].getY() + 110 + (90 * k));
-					posMoves[j + 7].draw();
+					posMoves[7].setX(kings[i].getX() - 70);
+					posMoves[7].setY(kings[i].getY() + 110);
+					posMoves[7].draw();
 				}
 			}
-		}
 
-		//DRAWING THE ROOKS AND THEIR POSSIABLE MOVES
-		for (size_t i = 0; i < 4; i++)
-		{
-			rooks[i].draw();
-
-			if (rooks[i].getMarked())
+			//DRAWING THE QUEENS AND THEIR POSSIABLE MOVES
+			for (size_t i = 0; i < 2; i++)
 			{
-				for (size_t j = 0, k = 0; j < 32; j += 4, k++)
+				queens[i].draw();
+
+				if (queens[i].getMarked())
 				{
-					posMoves[j].setX(rooks[i].getX() + 20);
-					posMoves[j].setY(rooks[i].getY() - 70 - (90 * k));
-					posMoves[j].draw();
-
-					posMoves[j + 1].setX(rooks[i].getX() + 20);
-					posMoves[j + 1].setY(rooks[i].getY() + 110 + (90 * k));
-					posMoves[j + 1].draw();
-
-					posMoves[j + 2].setX(rooks[i].getX() - 70 - (90 * k));
-					posMoves[j + 2].setY(rooks[i].getY() + 20);
-					posMoves[j + 2].draw();
-
-					posMoves[j + 3].setX(rooks[i].getX() + 110 + (90 * k));
-					posMoves[j + 3].setY(rooks[i].getY() + 20);
-					posMoves[j + 3].draw();
-				}
-			}
-		}
-
-		//DRAWING THE KNIGHTS AND THEIR POSSIABLE MOVES
-		for (size_t i = 0; i < 4; i++)
-		{
-			knights[i].draw();
-
-			if (knights[i].getMarked())
-			{
-				posMoves[0].setX(knights[i].getX() - 90 + 20);
-				posMoves[0].setY(knights[i].getY() + 180 + 20);
-				posMoves[0].draw();
-
-				posMoves[1].setX(knights[i].getX() + 90 + 20);
-				posMoves[1].setY(knights[i].getY() + 180 + 20);
-				posMoves[1].draw();
-
-				posMoves[2].setX(knights[i].getX() + 180 + 20);
-				posMoves[2].setY(knights[i].getY() + 90 + 20);
-				posMoves[2].draw();
-
-				posMoves[3].setX(knights[i].getX() + 180 + 20);
-				posMoves[3].setY(knights[i].getY() - 90 + 20);
-				posMoves[3].draw();
-
-				posMoves[4].setX(knights[i].getX() + 90 + 20);
-				posMoves[4].setY(knights[i].getY() - 180 + 20);
-				posMoves[4].draw();
-
-				posMoves[5].setX(knights[i].getX() - 90 + 20);
-				posMoves[5].setY(knights[i].getY() - 180 + 20);
-				posMoves[5].draw();
-
-				posMoves[6].setX(knights[i].getX() - 180 + 20);
-				posMoves[6].setY(knights[i].getY() - 90 + 20);
-				posMoves[6].draw();
-
-				posMoves[7].setX(knights[i].getX() - 180 + 20);
-				posMoves[7].setY(knights[i].getY() + 90 + 20);
-				posMoves[7].draw();
-			}
-		}
-
-		//DRAWING THE BISHOPS AND THEIR POSSIABLE MOVES
-		for (size_t i = 0; i < 4; i++)
-		{
-			bishops[i].draw();
-
-			if (bishops[i].getMarked())
-			{
-				for (size_t j = 0, k = 0; j < 32; j += 4, k++)
-				{
-					posMoves[j].setX(bishops[i].getX() - 70 - (90 * k));
-					posMoves[j].setY(bishops[i].getY() - 70 - (90 * k));
-
-					posMoves[j].draw();
-
-					posMoves[j + 1].setX(bishops[i].getX() + 110 + (90 * k));
-					posMoves[j + 1].setY(bishops[i].getY() + 110 + (90 * k));
-
-					posMoves[j + 1].draw();
-
-					posMoves[j + 2].setX(bishops[i].getX() + 110 + (90 * k));
-					posMoves[j + 2].setY(bishops[i].getY() - 70 - (90 * k));
-
-					posMoves[j + 2].draw();
-
-					posMoves[j + 3].setX(bishops[i].getX() - 70 - (90 * k));
-					posMoves[j + 3].setY(bishops[i].getY() + 110 + (90 * k));
-
-					posMoves[j + 3].draw();
-				}
-			}
-		}
-
-		//DRAWING THE PAWNS AND THEIR POSSIABLE MOVES
-		for (size_t i = 0; i < 16; i++)
-		{
-			pawns[i].draw();
-
-			if (pawns[i].getMarked())
-			{
-				if (pawns[i].getTeam() == 'W')
-				{
-					for (size_t j = 0; j < 2; j++)
+					for (size_t j = 0, k = 0; j < 64; j += 8, k++)
 					{
-						posMoves[j].setX(pawns[i].getX() + 20);
-						posMoves[j].setY(pawns[i].getY() - 70 - (90 * j));
-
+						posMoves[j].setX(queens[i].getX() + 20);
+						posMoves[j].setY(queens[i].getY() - 70 - (90 * k));
 						posMoves[j].draw();
 
-						if (pawns[i].getY() != 540)
-							break;
-					}
-				}
-				else
-				{
-					for (size_t j = 0; j < 2; j++)
-					{
-						posMoves[j].setX(pawns[i].getX() + 20);
-						posMoves[j].setY(pawns[i].getY() + 110 + (90 * j));
+						posMoves[j + 1].setX(queens[i].getX() + 20);
+						posMoves[j + 1].setY(queens[i].getY() + 110 + (90 * k));
+						posMoves[j + 1].draw();
 
-						posMoves[j].draw();
+						posMoves[j + 2].setX(queens[i].getX() - 70 - (90 * k));
+						posMoves[j + 2].setY(queens[i].getY() + 20);
+						posMoves[j + 2].draw();
 
-						if (pawns[i].getY() != 90)
-							break;
+						posMoves[j + 3].setX(queens[i].getX() + 110 + (90 * k));
+						posMoves[j + 3].setY(queens[i].getY() + 20);
+						posMoves[j + 3].draw();
+
+						posMoves[j + 4].setX(queens[i].getX() - 70 - (90 * k));
+						posMoves[j + 4].setY(queens[i].getY() - 70 - (90 * k));
+						posMoves[j + 4].draw();
+
+						posMoves[j + 5].setX(queens[i].getX() + 110 + (90 * k));
+						posMoves[j + 5].setY(queens[i].getY() + 110 + (90 * k));
+						posMoves[j + 5].draw();
+
+						posMoves[j + 6].setX(queens[i].getX() + 110 + (90 * k));
+						posMoves[j + 6].setY(queens[i].getY() - 70 - (90 * k));
+						posMoves[j + 6].draw();
+
+						posMoves[j + 7].setX(queens[i].getX() - 70 - (90 * k));
+						posMoves[j + 7].setY(queens[i].getY() + 110 + (90 * k));
+						posMoves[j + 7].draw();
 					}
 				}
 			}
-		}
 
-		//CHECKING IF WE NEED TO REMOVE A FIGURE FROM THE BOARD
-		if (rmvFig[0] != -1 && rmvFig[1] != -1)
-		{
+			//DRAWING THE ROOKS AND THEIR POSSIABLE MOVES
+			for (size_t i = 0; i < 4; i++)
+			{
+				rooks[i].draw();
+
+				if (rooks[i].getMarked())
+				{
+					for (size_t j = 0, k = 0; j < 32; j += 4, k++)
+					{
+						posMoves[j].setX(rooks[i].getX() + 20);
+						posMoves[j].setY(rooks[i].getY() - 70 - (90 * k));
+						posMoves[j].draw();
+
+						posMoves[j + 1].setX(rooks[i].getX() + 20);
+						posMoves[j + 1].setY(rooks[i].getY() + 110 + (90 * k));
+						posMoves[j + 1].draw();
+
+						posMoves[j + 2].setX(rooks[i].getX() - 70 - (90 * k));
+						posMoves[j + 2].setY(rooks[i].getY() + 20);
+						posMoves[j + 2].draw();
+
+						posMoves[j + 3].setX(rooks[i].getX() + 110 + (90 * k));
+						posMoves[j + 3].setY(rooks[i].getY() + 20);
+						posMoves[j + 3].draw();
+					}
+				}
+			}
+
+			//DRAWING THE KNIGHTS AND THEIR POSSIABLE MOVES
+			for (size_t i = 0; i < 4; i++)
+			{
+				knights[i].draw();
+
+				if (knights[i].getMarked())
+				{
+					posMoves[0].setX(knights[i].getX() - 90 + 20);
+					posMoves[0].setY(knights[i].getY() + 180 + 20);
+					posMoves[0].draw();
+
+					posMoves[1].setX(knights[i].getX() + 90 + 20);
+					posMoves[1].setY(knights[i].getY() + 180 + 20);
+					posMoves[1].draw();
+
+					posMoves[2].setX(knights[i].getX() + 180 + 20);
+					posMoves[2].setY(knights[i].getY() + 90 + 20);
+					posMoves[2].draw();
+
+					posMoves[3].setX(knights[i].getX() + 180 + 20);
+					posMoves[3].setY(knights[i].getY() - 90 + 20);
+					posMoves[3].draw();
+
+					posMoves[4].setX(knights[i].getX() + 90 + 20);
+					posMoves[4].setY(knights[i].getY() - 180 + 20);
+					posMoves[4].draw();
+
+					posMoves[5].setX(knights[i].getX() - 90 + 20);
+					posMoves[5].setY(knights[i].getY() - 180 + 20);
+					posMoves[5].draw();
+
+					posMoves[6].setX(knights[i].getX() - 180 + 20);
+					posMoves[6].setY(knights[i].getY() - 90 + 20);
+					posMoves[6].draw();
+
+					posMoves[7].setX(knights[i].getX() - 180 + 20);
+					posMoves[7].setY(knights[i].getY() + 90 + 20);
+					posMoves[7].draw();
+				}
+			}
+
+			//DRAWING THE BISHOPS AND THEIR POSSIABLE MOVES
+			for (size_t i = 0; i < 4; i++)
+			{
+				bishops[i].draw();
+
+				if (bishops[i].getMarked())
+				{
+					for (size_t j = 0, k = 0; j < 32; j += 4, k++)
+					{
+						posMoves[j].setX(bishops[i].getX() - 70 - (90 * k));
+						posMoves[j].setY(bishops[i].getY() - 70 - (90 * k));
+
+						posMoves[j].draw();
+
+						posMoves[j + 1].setX(bishops[i].getX() + 110 + (90 * k));
+						posMoves[j + 1].setY(bishops[i].getY() + 110 + (90 * k));
+
+						posMoves[j + 1].draw();
+
+						posMoves[j + 2].setX(bishops[i].getX() + 110 + (90 * k));
+						posMoves[j + 2].setY(bishops[i].getY() - 70 - (90 * k));
+
+						posMoves[j + 2].draw();
+
+						posMoves[j + 3].setX(bishops[i].getX() - 70 - (90 * k));
+						posMoves[j + 3].setY(bishops[i].getY() + 110 + (90 * k));
+
+						posMoves[j + 3].draw();
+					}
+				}
+			}
+
+			//DRAWING THE PAWNS AND THEIR POSSIABLE MOVES
 			for (size_t i = 0; i < 16; i++)
 			{
-				if (pawns[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				pawns[i].draw();
+
+				if (pawns[i].getMarked())
 				{
-					if (pawns[i].getX() / 90 == rmvFig[1] &&
-						pawns[i].getY() / 90 == rmvFig[0])
+					if (pawns[i].getTeam() == 'W')
 					{
-						pawns[i].setX(1720);
-						pawns[i].setY(1720);
-						break;
+						for (size_t j = 0; j < 2; j++)
+						{
+							posMoves[j].setX(pawns[i].getX() + 20);
+							posMoves[j].setY(pawns[i].getY() - 70 - (90 * j));
+
+							posMoves[j].draw();
+
+							if (pawns[i].getY() != 540)
+								break;
+						}
+					}
+					else
+					{
+						for (size_t j = 0; j < 2; j++)
+						{
+							posMoves[j].setX(pawns[i].getX() + 20);
+							posMoves[j].setY(pawns[i].getY() + 110 + (90 * j));
+
+							posMoves[j].draw();
+
+							if (pawns[i].getY() != 90)
+								break;
+						}
 					}
 				}
 			}
 
-			for (size_t i = 0; i < 4; i++)
+			//CHECKING IF WE NEED TO REMOVE A FIGURE FROM THE BOARD
+			if (rmvFig[0] != -1 && rmvFig[1] != -1)
 			{
-				if (rooks[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				for (size_t i = 0; i < 16; i++)
 				{
-					if (rooks[i].getX() / 90 == rmvFig[1] &&
-						rooks[i].getY() / 90 == rmvFig[0])
+					if (pawns[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
 					{
-						rooks[i].setX(1720);
-						rooks[i].setY(1720);
-						break;
+						if (pawns[i].getX() / 90 == rmvFig[1] &&
+							pawns[i].getY() / 90 == rmvFig[0])
+						{
+							pawns[i].setX(1720);
+							pawns[i].setY(1720);
+							break;
+						}
 					}
 				}
-			}
 
-			for (size_t i = 0; i < 4; i++)
-			{
-				if (knights[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				for (size_t i = 0; i < 4; i++)
 				{
-					if (knights[i].getX() / 90 == rmvFig[1] &&
-						knights[i].getY() / 90 == rmvFig[0])
+					if (rooks[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
 					{
-						knights[i].setX(1720);
-						knights[i].setY(1720);
-						break;
+						if (rooks[i].getX() / 90 == rmvFig[1] &&
+							rooks[i].getY() / 90 == rmvFig[0])
+						{
+							rooks[i].setX(1720);
+							rooks[i].setY(1720);
+							break;
+						}
 					}
 				}
-			}
 
-			for (size_t i = 0; i < 4; i++)
-			{
-				if (bishops[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				for (size_t i = 0; i < 4; i++)
 				{
-					if (bishops[i].getX() / 90 == rmvFig[1] &&
-						bishops[i].getY() / 90 == rmvFig[0])
+					if (knights[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
 					{
-						bishops[i].setX(1720);
-						bishops[i].setY(1720);
-						break;
+						if (knights[i].getX() / 90 == rmvFig[1] &&
+							knights[i].getY() / 90 == rmvFig[0])
+						{
+							knights[i].setX(1720);
+							knights[i].setY(1720);
+							break;
+						}
 					}
 				}
-			}
 
-			for (size_t i = 0; i < 2; i++)
-			{
-				if (kings[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				for (size_t i = 0; i < 4; i++)
 				{
-					if (kings[i].getX() / 90 == rmvFig[1] &&
-						kings[i].getY() / 90 == rmvFig[0])
+					if (bishops[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
 					{
-						kings[i].setX(1720);
-						kings[i].setY(1720);
-						break;
+						if (bishops[i].getX() / 90 == rmvFig[1] &&
+							bishops[i].getY() / 90 == rmvFig[0])
+						{
+							bishops[i].setX(1720);
+							bishops[i].setY(1720);
+							break;
+						}
 					}
 				}
-			}
 
-			for (size_t i = 0; i < 2; i++)
-			{
-				if (queens[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+				for (size_t i = 0; i < 2; i++)
 				{
-					if (queens[i].getX() / 90 == rmvFig[1] &&
-						queens[i].getY() / 90 == rmvFig[0])
+					if (kings[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
 					{
-						queens[i].setX(1720);
-						queens[i].setY(1720);
-						break;
+						if (kings[i].getX() / 90 == rmvFig[1] &&
+							kings[i].getY() / 90 == rmvFig[0])
+						{
+							kings[i].setX(1720);
+							kings[i].setY(1720);
+							break;
+						}
 					}
 				}
-			}
 
-			rmvFig[0] = -1;
-			rmvFig[1] = -1;
+				for (size_t i = 0; i < 2; i++)
+				{
+					if (queens[i].getTeam() == rmvFig[2]) //using the ascii code of 'W'/'B'
+					{
+						if (queens[i].getX() / 90 == rmvFig[1] &&
+							queens[i].getY() / 90 == rmvFig[0])
+						{
+							queens[i].setX(1720);
+							queens[i].setY(1720);
+							break;
+						}
+					}
+				}
+
+				rmvFig[0] = -1;
+				rmvFig[1] = -1;
+			}
 		}
-
 		window.clear();
 	}
 

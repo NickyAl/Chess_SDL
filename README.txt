@@ -12,3 +12,4 @@
 	    protected by the other teams figures
 	  - the grid that determines which sqrs are protected now works with all the figures from 
   	    the team and the kings can no longer move to a protected sqr
+18.9.2020 - started working on checkmate
